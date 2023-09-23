@@ -1,0 +1,63 @@
+{
+  "name": "igo_nikki",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:bypass": "VITE_BYPASS_AUTH0=1 vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "prepare": "cd .. && husky install web/.husky",
+    "deploy": "node deploy.cjs"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.7.17",
+    "@auth0/auth0-react": "^2.2.0",
+    "@sabaki/sgf": "github:tkzwhr/sgf",
+    "antd": "^5.7.3",
+    "date-fns": "^2.30.0",
+    "graphql": "^16.7.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-event-hook": "^3.1.2",
+    "react-router-dom": "^6.14.2",
+    "react-use": "^17.4.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@types/jest": "^29.5.3",
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "@vitest/coverage-c8": "^0.33.0",
+    "eslint": "^8.46.0",
+    "eslint-plugin-react": "^7.33.1",
+    "ftp-deploy": "^2.4.4",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.0",
+    "pretty-quick": "^3.1.3",
+    "styled-components": "^6.0.7",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.7",
+    "vitest": "^0.33.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-dom/extend-expect"
+    ]
+  }
+}

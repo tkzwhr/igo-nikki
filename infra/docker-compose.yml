@@ -10,15 +10,16 @@ services:
       - ./postgresql:/docker-entrypoint-initdb.d
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "test `psql -U postgres igo_nikki_test -c '\\dt' -t | wc -l` = 2"]
+      test: ["CMD-SHELL", "test `psql -U postgres igo_nikki_test -c '\\dt' -t | wc -l` = 3"]
       interval: 1s
       timeout: 30s
       retries: 10
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
+      TZ: "Asia/Tokyo"
   hasura: &hasura
     container_name: hasura
-    image: hasura/graphql-engine:v2.16.1.cli-migrations-v3
+    image: hasura/graphql-engine:v2.30.1.cli-migrations-v3.ubuntu
     ports:
       - "20180:8080"
     volumes:
@@ -33,6 +34,14 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ADMIN_SECRET: hasura
+      HASURA_GRAPHQL_JWT_SECRET: |
+        {
+          "type": "RS512",
+          "key": "-----BEGIN CERTIFICATE-----\nMIIDBzCCAe+gAwIBAgIJBR9EqbNlLkqKMA0GCSqGSIb3DQEBCwUAMCExHzAdBgNV\nBAMTFmlnby1uaWtraS5qcC5hdXRoMC5jb20wHhcNMjMwMTIyMDIxNzI1WhcNMzYw\nOTMwMDIxNzI1WjAhMR8wHQYDVQQDExZpZ28tbmlra2kuanAuYXV0aDAuY29tMIIB\nIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl7GCJ+Aqxhm3WnoH8iEIrjwy\nbKzOsH8yynNUJwgUJUfwwtsIe2ra9mvrpwFwa7EJOhyPNiP8qZvYuxG5yk+d3X81\nG4WTiQnQuGiz8qsHw0cRYzh1khGtLzsOxxxNP/y5sjqLe5YcHBuT4WMUJJYbhSur\nSJKTP6e1No9Ix6VyJI1OtcMuKF6DGW13DaaK2bb3e+gbWGTwVeZe05M3xpTSbQPw\nuKkYhx05mSyDQfVdLzpnzJIoN33MXDay5yRjDsWg00bzgoiZJeRDDeUcFLWJ1Ha7\neeSPp42vmrY8df3nJXLBnuZit9i2Y2ONe3iiEXGs7tBXNvXtusTqyRQa43rSBwID\nAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQkM1RCm/9dW8PwjMm8\nCLpRShzC0zAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEBAECNID/I\nazSxFyLrTwYlpdVxML/NZuoTiX2feyVjrUk+V4R34pJsM/XA16kYBNFLQzrvF8ou\nmtahccZ+wDRkaAH9FX8ZpVX8uu5W+aZa+gOmTTy3qXbvvTZToD8wjg9sqt6eHc6A\nPSAah9HCFBIluwQQMXQi4idAWjG5tWY3N0Gvy1wEe1xxTuywxzySt5I2jricbgMY\nRd8dF2GQWk9kFY6UHNZgrzLP4NYlqpQUA7V8e8vUz/53HAXYkCZ0ErE4ma0KpUnf\n464EWwa1dBntrD3/1+M4Phc8goUrTiZO3/qix8RhRhFDgobdxjAXZNB0s5cd6EdB\n6qIXWrJ61pU78jk=\n-----END CERTIFICATE-----",
+          "allowed_skew": 86400
+        }
+      # TZが使えないので、 allowed_skew で時間のチェックをごまかす
+      # TZ: "Asia/Tokyo"
   hasura-test:
     <<: *hasura
     container_name: hasura-test
