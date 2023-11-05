@@ -1,0 +1,5 @@
+mutation FailAnalyzing($pk: Int!, $errorMessage: String!) {
+    update_analysis_jobs_by_pk(pk_columns: {id: $pk}, _set: {error_message: $errorMessage}) {
+        id
+    }
+}

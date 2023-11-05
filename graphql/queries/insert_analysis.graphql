@@ -1,0 +1,23 @@
+mutation InsertAnalysis(
+    $move: String!,
+    $prior: float8!,
+    $recordId: Int!,
+    $scoreLead: float8!,
+    $turnNumber: Int!,
+    $utility: float8!,
+    $visits: Int!,
+    $winrate: float8!
+) {
+    insert_analysis_one(object: {
+        move: $move,
+        prior: $prior,
+        record_id: $recordId,
+        score_lead: $scoreLead,
+        turn_number: $turnNumber,
+        utility: $utility,
+        visits: $visits,
+        winrate: $winrate
+    }) {
+        id
+    }
+}

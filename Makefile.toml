@@ -1,0 +1,69 @@
+[tasks.up]
+command = "docker"
+args = ["compose", "-f", "infra/docker-compose.yml", "up", "-d"]
+
+[tasks.down]
+command = "docker"
+args = ["compose", "-f", "infra/docker-compose.yml", "down"]
+
+[tasks.front_bypass]
+cwd = "web"
+command = "yarn"
+args = ["run", "dev:bypass"]
+
+[tasks.front.run_task]
+name = ["front_dev", "ngrok"]
+fork = true
+parallel = true
+
+[tasks.front_dev]
+cwd = "web"
+command = "yarn"
+args = ["run", "dev"]
+
+[tasks.ngrok]
+command = "ngrok"
+args = ["http", "20180"]
+
+[tasks.build_analyzer]
+command = "docker"
+args = ["build", "-f", "infra/analyzer/Dockerfile", "-t", "igo-nikki-analyzer", "."]
+
+[tasks.analyze]
+cwd = "analyzer"
+command = "cargo"
+args = ["run"]
+
+[tasks.update_hasura_metadata]
+cwd = "infra/hasura"
+script = '''
+rm -rf metadata
+hasura --skip-update-check metadata export --admin-secret hasura
+'''
+
+[tasks.update_graphql_schema]
+cwd = "graphql"
+script = '''
+npx graphqurl http://localhost:20180/v1/graphql -H "X-Hasura-Admin-Secret: hasura" --introspect > schema.graphql
+'''
+
+[tasks.create_user]
+script = '''
+QUERY='
+mutation RegisterUser($id: String!) {
+  insert_users_one(object: {id: $id, name: $id}) {
+    id
+  }
+}
+'
+QUERY="$(echo $QUERY)"
+DATA="{\"query\":\"$QUERY\",\"variables\":{\"id\":\"${1}\"}}"
+
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'X-Hasura-Admin-Secret: hasura' \
+  -d "$DATA" \
+  http://localhost:20180/v1/graphql
+
+echo ""
+'''

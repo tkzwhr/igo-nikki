@@ -1,0 +1,9 @@
+query GetAnalysisJob {
+    analysis_jobs(where: {started_at: {_is_null: true}}) {
+        id
+        record_id
+        record {
+            sgf_text
+        }
+    }
+}

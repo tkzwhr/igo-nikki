@@ -3,10 +3,10 @@
 
 ## 必要なソフトウェア
 
+- cargo make
 - Docker
-- mkcert
-- ngrok
 - hasura cli
+- ngrok
 
 ## 導入
 
@@ -14,7 +14,6 @@
 
 - サーバーをhttpsで起動する
 - `localhost` 以外のドメインを使用できるようにする
-  - `localhost.local` を用意する
 
 ### WSL2での設定例
 
@@ -62,58 +61,80 @@ Firefoxの場合は、更にWindowsの証明書を使用する設定を追加す
 
 ### サーバーの起動
 
-PostgresとHasuraを起動する。
+DB、Hasura、KataGoを起動する。
 
 ```shell
-cd infra
-docker compose up -d
-cd ../web
-
-# auth0バイパス用
-yarn run dev:bypass
-
-# 通常用
-yarn run dev
+cargo make up
 ```
 
-### Auth0の設定
-
-Auth0からのHasuraにアクセスできるようにするために、ngrokでHasuraのエンドポイントを公開する。
+### サーバーの終了
 
 ```shell
-ngrok http 20180
+cargo make down
 ```
 
-エンドポイントのURLが表示されたらAuth0側に設定する。
+### フロントエンド開発
 
-Auth Pipeline > Rules を開き、 `sign-in` のruleの `const domain = "xxx";` を書き換える。
+```shell
+cargo make front
+```
 
-#### バイパス用
+ngrokのエンドポイントのURLが表示されたらAuth0側に設定する。
 
-Auth0をバイパスする場合は、下記の通りAPIデバッガーを利用する。
+Actions > Library > Custom を開き、 `sign-in` のactionのSecretsにある `entrypoint` を書き換える。
+
+#### Auth0のバイパス
+
+Auth0をバイパスしたい場合は、下記の通りAPIデバッガーを利用する。
 
 https://hasura.io/learn/ja/graphql/hasura/authentication/5-test-with-headers/
 
-`access_token` が取得できたら、ルートディレクトリに `.env.development.local` を作成する。
+`access_token` が取得できたら、 `web/.env.development.local` を作成する。
 
 ```
 VITE_BYPASS_AUTH0=1
 VITE_HASURA_TOKEN=<上記で取得したaccess_token>
 ```
 
-また、hasuraコンソール上でユーザーを作成する。
-
-### Webの起動
+DBにユーザーを作成してバイパス用のコマンドで起動する。
 
 ```shell
-cd web
-yarn run dev
+cargo make create_user <ユーザーID>
+cargo make front_bypass
+```
+
+### 解析器開発
+
+`analyzer/.env` を作成する。
+
+```
+GRAPHQL_HOST=http://localhost:20180/v1/graphql
+GRAPHQL_ADMIN_SECRET=hasura
+ANALYZER_COMMAND=docker
+ANALYZER_OPTIONS="exec -i katago ./katago analysis -model default_model.bin.gz -config analysis.cfg"
+MOVE_PER_TURNS=3
+```
+
+起動する。
+
+```shell
+cargo make analyze
+```
+
+### 解析器のビルド
+
+```shell
+cargo make build_analyzer
 ```
 
 ### Hasura Metadataの更新
 
 ```shell
-cd infra/hasura
-rm -rf metadata
-hasura metadata export --admin-secret hasura
+cargo make update_hasura_metadata
+```
+
+### GraphQL Schemaの更新
+
+```shell
+cargo make update_graphql_schema
 ```

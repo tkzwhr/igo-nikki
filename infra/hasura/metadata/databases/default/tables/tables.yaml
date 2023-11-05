@@ -1,2 +1,4 @@
+- "!include public_analysis.yaml"
+- "!include public_analysis_jobs.yaml"
 - "!include public_records.yaml"
 - "!include public_users.yaml"

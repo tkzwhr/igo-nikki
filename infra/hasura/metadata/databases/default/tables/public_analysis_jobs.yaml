@@ -1,0 +1,31 @@
+table:
+  name: analysis_jobs
+  schema: public
+object_relationships:
+  - name: record
+    using:
+      foreign_key_constraint_on: record_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        record:
+          owned_by:
+            _eq: X-Hasura-User-Id
+      columns:
+        - record_id
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - error_message
+        - finished_at
+        - id
+        - record_id
+        - started_at
+      filter:
+        record:
+          owned_by:
+            _eq: X-Hasura-User-Id
+    comment: ""

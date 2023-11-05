@@ -1,0 +1,5 @@
+mutation StartAnalyzing($pk: Int!, $startedAt: timestamp!) {
+    update_analysis_jobs_by_pk(pk_columns: {id: $pk}, _set: {started_at: $startedAt}) {
+        id
+    }
+}

@@ -1,0 +1,2050 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""
+columns and relationships of "analysis"
+"""
+type analysis {
+  id: Int!
+  move: String!
+  prior: float8!
+
+  """An object relationship"""
+  record: records!
+  record_id: Int!
+  score_lead: float8!
+  turn_number: Int!
+  utility: float8!
+  visits: Int!
+  winrate: float8!
+}
+
+"""
+aggregated selection of "analysis"
+"""
+type analysis_aggregate {
+  aggregate: analysis_aggregate_fields
+  nodes: [analysis!]!
+}
+
+"""
+aggregate fields of "analysis"
+"""
+type analysis_aggregate_fields {
+  avg: analysis_avg_fields
+  count(columns: [analysis_select_column!], distinct: Boolean): Int!
+  max: analysis_max_fields
+  min: analysis_min_fields
+  stddev: analysis_stddev_fields
+  stddev_pop: analysis_stddev_pop_fields
+  stddev_samp: analysis_stddev_samp_fields
+  sum: analysis_sum_fields
+  var_pop: analysis_var_pop_fields
+  var_samp: analysis_var_samp_fields
+  variance: analysis_variance_fields
+}
+
+"""aggregate avg on columns"""
+type analysis_avg_fields {
+  id: Float
+  prior: Float
+  record_id: Float
+  score_lead: Float
+  turn_number: Float
+  utility: Float
+  visits: Float
+  winrate: Float
+}
+
+"""
+Boolean expression to filter rows from the table "analysis". All fields are combined with a logical 'AND'.
+"""
+input analysis_bool_exp {
+  _and: [analysis_bool_exp!]
+  _not: analysis_bool_exp
+  _or: [analysis_bool_exp!]
+  id: Int_comparison_exp
+  move: String_comparison_exp
+  prior: float8_comparison_exp
+  record: records_bool_exp
+  record_id: Int_comparison_exp
+  score_lead: float8_comparison_exp
+  turn_number: Int_comparison_exp
+  utility: float8_comparison_exp
+  visits: Int_comparison_exp
+  winrate: float8_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "analysis"
+"""
+enum analysis_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  analysis_pk
+}
+
+"""
+input type for incrementing numeric columns in table "analysis"
+"""
+input analysis_inc_input {
+  id: Int
+  prior: float8
+  record_id: Int
+  score_lead: float8
+  turn_number: Int
+  utility: float8
+  visits: Int
+  winrate: float8
+}
+
+"""
+input type for inserting data into table "analysis"
+"""
+input analysis_insert_input {
+  id: Int
+  move: String
+  prior: float8
+  record: records_obj_rel_insert_input
+  record_id: Int
+  score_lead: float8
+  turn_number: Int
+  utility: float8
+  visits: Int
+  winrate: float8
+}
+
+"""
+columns and relationships of "analysis_jobs"
+"""
+type analysis_jobs {
+  error_message: String
+  finished_at: timestamp
+  id: Int!
+
+  """An object relationship"""
+  record: records!
+  record_id: Int!
+  started_at: timestamp
+}
+
+"""
+aggregated selection of "analysis_jobs"
+"""
+type analysis_jobs_aggregate {
+  aggregate: analysis_jobs_aggregate_fields
+  nodes: [analysis_jobs!]!
+}
+
+"""
+aggregate fields of "analysis_jobs"
+"""
+type analysis_jobs_aggregate_fields {
+  avg: analysis_jobs_avg_fields
+  count(columns: [analysis_jobs_select_column!], distinct: Boolean): Int!
+  max: analysis_jobs_max_fields
+  min: analysis_jobs_min_fields
+  stddev: analysis_jobs_stddev_fields
+  stddev_pop: analysis_jobs_stddev_pop_fields
+  stddev_samp: analysis_jobs_stddev_samp_fields
+  sum: analysis_jobs_sum_fields
+  var_pop: analysis_jobs_var_pop_fields
+  var_samp: analysis_jobs_var_samp_fields
+  variance: analysis_jobs_variance_fields
+}
+
+"""aggregate avg on columns"""
+type analysis_jobs_avg_fields {
+  id: Float
+  record_id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "analysis_jobs". All fields are combined with a logical 'AND'.
+"""
+input analysis_jobs_bool_exp {
+  _and: [analysis_jobs_bool_exp!]
+  _not: analysis_jobs_bool_exp
+  _or: [analysis_jobs_bool_exp!]
+  error_message: String_comparison_exp
+  finished_at: timestamp_comparison_exp
+  id: Int_comparison_exp
+  record: records_bool_exp
+  record_id: Int_comparison_exp
+  started_at: timestamp_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "analysis_jobs"
+"""
+enum analysis_jobs_constraint {
+  """
+  unique or primary key constraint on columns "record_id"
+  """
+  analysis_jobs_record_id_key
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  analyzing_status_pk
+}
+
+"""
+input type for incrementing numeric columns in table "analysis_jobs"
+"""
+input analysis_jobs_inc_input {
+  id: Int
+  record_id: Int
+}
+
+"""
+input type for inserting data into table "analysis_jobs"
+"""
+input analysis_jobs_insert_input {
+  error_message: String
+  finished_at: timestamp
+  id: Int
+  record: records_obj_rel_insert_input
+  record_id: Int
+  started_at: timestamp
+}
+
+"""aggregate max on columns"""
+type analysis_jobs_max_fields {
+  error_message: String
+  finished_at: timestamp
+  id: Int
+  record_id: Int
+  started_at: timestamp
+}
+
+"""aggregate min on columns"""
+type analysis_jobs_min_fields {
+  error_message: String
+  finished_at: timestamp
+  id: Int
+  record_id: Int
+  started_at: timestamp
+}
+
+"""
+response of any mutation on the table "analysis_jobs"
+"""
+type analysis_jobs_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [analysis_jobs!]!
+}
+
+"""
+input type for inserting object relation for remote table "analysis_jobs"
+"""
+input analysis_jobs_obj_rel_insert_input {
+  data: analysis_jobs_insert_input!
+
+  """upsert condition"""
+  on_conflict: analysis_jobs_on_conflict
+}
+
+"""
+on_conflict condition type for table "analysis_jobs"
+"""
+input analysis_jobs_on_conflict {
+  constraint: analysis_jobs_constraint!
+  update_columns: [analysis_jobs_update_column!]! = []
+  where: analysis_jobs_bool_exp
+}
+
+"""Ordering options when selecting data from "analysis_jobs"."""
+input analysis_jobs_order_by {
+  error_message: order_by
+  finished_at: order_by
+  id: order_by
+  record: records_order_by
+  record_id: order_by
+  started_at: order_by
+}
+
+"""primary key columns input for table: analysis_jobs"""
+input analysis_jobs_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "analysis_jobs"
+"""
+enum analysis_jobs_select_column {
+  """column name"""
+  error_message
+
+  """column name"""
+  finished_at
+
+  """column name"""
+  id
+
+  """column name"""
+  record_id
+
+  """column name"""
+  started_at
+}
+
+"""
+input type for updating data in table "analysis_jobs"
+"""
+input analysis_jobs_set_input {
+  error_message: String
+  finished_at: timestamp
+  id: Int
+  record_id: Int
+  started_at: timestamp
+}
+
+"""aggregate stddev on columns"""
+type analysis_jobs_stddev_fields {
+  id: Float
+  record_id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type analysis_jobs_stddev_pop_fields {
+  id: Float
+  record_id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type analysis_jobs_stddev_samp_fields {
+  id: Float
+  record_id: Float
+}
+
+"""
+Streaming cursor of the table "analysis_jobs"
+"""
+input analysis_jobs_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: analysis_jobs_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input analysis_jobs_stream_cursor_value_input {
+  error_message: String
+  finished_at: timestamp
+  id: Int
+  record_id: Int
+  started_at: timestamp
+}
+
+"""aggregate sum on columns"""
+type analysis_jobs_sum_fields {
+  id: Int
+  record_id: Int
+}
+
+"""
+update columns of table "analysis_jobs"
+"""
+enum analysis_jobs_update_column {
+  """column name"""
+  error_message
+
+  """column name"""
+  finished_at
+
+  """column name"""
+  id
+
+  """column name"""
+  record_id
+
+  """column name"""
+  started_at
+}
+
+input analysis_jobs_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: analysis_jobs_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: analysis_jobs_set_input
+
+  """filter the rows which have to be updated"""
+  where: analysis_jobs_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type analysis_jobs_var_pop_fields {
+  id: Float
+  record_id: Float
+}
+
+"""aggregate var_samp on columns"""
+type analysis_jobs_var_samp_fields {
+  id: Float
+  record_id: Float
+}
+
+"""aggregate variance on columns"""
+type analysis_jobs_variance_fields {
+  id: Float
+  record_id: Float
+}
+
+"""aggregate max on columns"""
+type analysis_max_fields {
+  id: Int
+  move: String
+  prior: float8
+  record_id: Int
+  score_lead: float8
+  turn_number: Int
+  utility: float8
+  visits: Int
+  winrate: float8
+}
+
+"""aggregate min on columns"""
+type analysis_min_fields {
+  id: Int
+  move: String
+  prior: float8
+  record_id: Int
+  score_lead: float8
+  turn_number: Int
+  utility: float8
+  visits: Int
+  winrate: float8
+}
+
+"""
+response of any mutation on the table "analysis"
+"""
+type analysis_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [analysis!]!
+}
+
+"""
+on_conflict condition type for table "analysis"
+"""
+input analysis_on_conflict {
+  constraint: analysis_constraint!
+  update_columns: [analysis_update_column!]! = []
+  where: analysis_bool_exp
+}
+
+"""Ordering options when selecting data from "analysis"."""
+input analysis_order_by {
+  id: order_by
+  move: order_by
+  prior: order_by
+  record: records_order_by
+  record_id: order_by
+  score_lead: order_by
+  turn_number: order_by
+  utility: order_by
+  visits: order_by
+  winrate: order_by
+}
+
+"""primary key columns input for table: analysis"""
+input analysis_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "analysis"
+"""
+enum analysis_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  move
+
+  """column name"""
+  prior
+
+  """column name"""
+  record_id
+
+  """column name"""
+  score_lead
+
+  """column name"""
+  turn_number
+
+  """column name"""
+  utility
+
+  """column name"""
+  visits
+
+  """column name"""
+  winrate
+}
+
+"""
+input type for updating data in table "analysis"
+"""
+input analysis_set_input {
+  id: Int
+  move: String
+  prior: float8
+  record_id: Int
+  score_lead: float8
+  turn_number: Int
+  utility: float8
+  visits: Int
+  winrate: float8
+}
+
+"""aggregate stddev on columns"""
+type analysis_stddev_fields {
+  id: Float
+  prior: Float
+  record_id: Float
+  score_lead: Float
+  turn_number: Float
+  utility: Float
+  visits: Float
+  winrate: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type analysis_stddev_pop_fields {
+  id: Float
+  prior: Float
+  record_id: Float
+  score_lead: Float
+  turn_number: Float
+  utility: Float
+  visits: Float
+  winrate: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type analysis_stddev_samp_fields {
+  id: Float
+  prior: Float
+  record_id: Float
+  score_lead: Float
+  turn_number: Float
+  utility: Float
+  visits: Float
+  winrate: Float
+}
+
+"""
+Streaming cursor of the table "analysis"
+"""
+input analysis_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: analysis_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input analysis_stream_cursor_value_input {
+  id: Int
+  move: String
+  prior: float8
+  record_id: Int
+  score_lead: float8
+  turn_number: Int
+  utility: float8
+  visits: Int
+  winrate: float8
+}
+
+"""aggregate sum on columns"""
+type analysis_sum_fields {
+  id: Int
+  prior: float8
+  record_id: Int
+  score_lead: float8
+  turn_number: Int
+  utility: float8
+  visits: Int
+  winrate: float8
+}
+
+"""
+update columns of table "analysis"
+"""
+enum analysis_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  move
+
+  """column name"""
+  prior
+
+  """column name"""
+  record_id
+
+  """column name"""
+  score_lead
+
+  """column name"""
+  turn_number
+
+  """column name"""
+  utility
+
+  """column name"""
+  visits
+
+  """column name"""
+  winrate
+}
+
+input analysis_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: analysis_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: analysis_set_input
+
+  """filter the rows which have to be updated"""
+  where: analysis_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type analysis_var_pop_fields {
+  id: Float
+  prior: Float
+  record_id: Float
+  score_lead: Float
+  turn_number: Float
+  utility: Float
+  visits: Float
+  winrate: Float
+}
+
+"""aggregate var_samp on columns"""
+type analysis_var_samp_fields {
+  id: Float
+  prior: Float
+  record_id: Float
+  score_lead: Float
+  turn_number: Float
+  utility: Float
+  visits: Float
+  winrate: Float
+}
+
+"""aggregate variance on columns"""
+type analysis_variance_fields {
+  id: Float
+  prior: Float
+  record_id: Float
+  score_lead: Float
+  turn_number: Float
+  utility: Float
+  visits: Float
+  winrate: Float
+}
+
+"""ordering argument of a cursor"""
+enum cursor_ordering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+scalar float8
+
+"""
+Boolean expression to compare columns of type "float8". All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "analysis"
+  """
+  delete_analysis(
+    """filter the rows which have to be deleted"""
+    where: analysis_bool_exp!
+  ): analysis_mutation_response
+
+  """
+  delete single row from the table: "analysis"
+  """
+  delete_analysis_by_pk(id: Int!): analysis
+
+  """
+  delete data from the table: "analysis_jobs"
+  """
+  delete_analysis_jobs(
+    """filter the rows which have to be deleted"""
+    where: analysis_jobs_bool_exp!
+  ): analysis_jobs_mutation_response
+
+  """
+  delete single row from the table: "analysis_jobs"
+  """
+  delete_analysis_jobs_by_pk(id: Int!): analysis_jobs
+
+  """
+  delete data from the table: "records"
+  """
+  delete_records(
+    """filter the rows which have to be deleted"""
+    where: records_bool_exp!
+  ): records_mutation_response
+
+  """
+  delete single row from the table: "records"
+  """
+  delete_records_by_pk(id: Int!): records
+
+  """
+  delete data from the table: "users"
+  """
+  delete_users(
+    """filter the rows which have to be deleted"""
+    where: users_bool_exp!
+  ): users_mutation_response
+
+  """
+  delete single row from the table: "users"
+  """
+  delete_users_by_pk(id: String!): users
+
+  """
+  insert data into the table: "analysis"
+  """
+  insert_analysis(
+    """the rows to be inserted"""
+    objects: [analysis_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: analysis_on_conflict
+  ): analysis_mutation_response
+
+  """
+  insert data into the table: "analysis_jobs"
+  """
+  insert_analysis_jobs(
+    """the rows to be inserted"""
+    objects: [analysis_jobs_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: analysis_jobs_on_conflict
+  ): analysis_jobs_mutation_response
+
+  """
+  insert a single row into the table: "analysis_jobs"
+  """
+  insert_analysis_jobs_one(
+    """the row to be inserted"""
+    object: analysis_jobs_insert_input!
+
+    """upsert condition"""
+    on_conflict: analysis_jobs_on_conflict
+  ): analysis_jobs
+
+  """
+  insert a single row into the table: "analysis"
+  """
+  insert_analysis_one(
+    """the row to be inserted"""
+    object: analysis_insert_input!
+
+    """upsert condition"""
+    on_conflict: analysis_on_conflict
+  ): analysis
+
+  """
+  insert data into the table: "records"
+  """
+  insert_records(
+    """the rows to be inserted"""
+    objects: [records_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: records_on_conflict
+  ): records_mutation_response
+
+  """
+  insert a single row into the table: "records"
+  """
+  insert_records_one(
+    """the row to be inserted"""
+    object: records_insert_input!
+
+    """upsert condition"""
+    on_conflict: records_on_conflict
+  ): records
+
+  """
+  insert data into the table: "users"
+  """
+  insert_users(
+    """the rows to be inserted"""
+    objects: [users_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: users_on_conflict
+  ): users_mutation_response
+
+  """
+  insert a single row into the table: "users"
+  """
+  insert_users_one(
+    """the row to be inserted"""
+    object: users_insert_input!
+
+    """upsert condition"""
+    on_conflict: users_on_conflict
+  ): users
+
+  """
+  update data of the table: "analysis"
+  """
+  update_analysis(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: analysis_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: analysis_set_input
+
+    """filter the rows which have to be updated"""
+    where: analysis_bool_exp!
+  ): analysis_mutation_response
+
+  """
+  update single row of the table: "analysis"
+  """
+  update_analysis_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: analysis_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: analysis_set_input
+    pk_columns: analysis_pk_columns_input!
+  ): analysis
+
+  """
+  update data of the table: "analysis_jobs"
+  """
+  update_analysis_jobs(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: analysis_jobs_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: analysis_jobs_set_input
+
+    """filter the rows which have to be updated"""
+    where: analysis_jobs_bool_exp!
+  ): analysis_jobs_mutation_response
+
+  """
+  update single row of the table: "analysis_jobs"
+  """
+  update_analysis_jobs_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: analysis_jobs_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: analysis_jobs_set_input
+    pk_columns: analysis_jobs_pk_columns_input!
+  ): analysis_jobs
+
+  """
+  update multiples rows of table: "analysis_jobs"
+  """
+  update_analysis_jobs_many(
+    """updates to execute, in order"""
+    updates: [analysis_jobs_updates!]!
+  ): [analysis_jobs_mutation_response]
+
+  """
+  update multiples rows of table: "analysis"
+  """
+  update_analysis_many(
+    """updates to execute, in order"""
+    updates: [analysis_updates!]!
+  ): [analysis_mutation_response]
+
+  """
+  update data of the table: "records"
+  """
+  update_records(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: records_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: records_set_input
+
+    """filter the rows which have to be updated"""
+    where: records_bool_exp!
+  ): records_mutation_response
+
+  """
+  update single row of the table: "records"
+  """
+  update_records_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: records_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: records_set_input
+    pk_columns: records_pk_columns_input!
+  ): records
+
+  """
+  update multiples rows of table: "records"
+  """
+  update_records_many(
+    """updates to execute, in order"""
+    updates: [records_updates!]!
+  ): [records_mutation_response]
+
+  """
+  update data of the table: "users"
+  """
+  update_users(
+    """sets the columns of the filtered rows to the given values"""
+    _set: users_set_input
+
+    """filter the rows which have to be updated"""
+    where: users_bool_exp!
+  ): users_mutation_response
+
+  """
+  update single row of the table: "users"
+  """
+  update_users_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: users_set_input
+    pk_columns: users_pk_columns_input!
+  ): users
+
+  """
+  update multiples rows of table: "users"
+  """
+  update_users_many(
+    """updates to execute, in order"""
+    updates: [users_updates!]!
+  ): [users_mutation_response]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+type query_root {
+  """
+  fetch data from the table: "analysis"
+  """
+  analysis(
+    """distinct select on columns"""
+    distinct_on: [analysis_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [analysis_order_by!]
+
+    """filter the rows returned"""
+    where: analysis_bool_exp
+  ): [analysis!]!
+
+  """
+  fetch aggregated fields from the table: "analysis"
+  """
+  analysis_aggregate(
+    """distinct select on columns"""
+    distinct_on: [analysis_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [analysis_order_by!]
+
+    """filter the rows returned"""
+    where: analysis_bool_exp
+  ): analysis_aggregate!
+
+  """fetch data from the table: "analysis" using primary key columns"""
+  analysis_by_pk(id: Int!): analysis
+
+  """
+  fetch data from the table: "analysis_jobs"
+  """
+  analysis_jobs(
+    """distinct select on columns"""
+    distinct_on: [analysis_jobs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [analysis_jobs_order_by!]
+
+    """filter the rows returned"""
+    where: analysis_jobs_bool_exp
+  ): [analysis_jobs!]!
+
+  """
+  fetch aggregated fields from the table: "analysis_jobs"
+  """
+  analysis_jobs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [analysis_jobs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [analysis_jobs_order_by!]
+
+    """filter the rows returned"""
+    where: analysis_jobs_bool_exp
+  ): analysis_jobs_aggregate!
+
+  """fetch data from the table: "analysis_jobs" using primary key columns"""
+  analysis_jobs_by_pk(id: Int!): analysis_jobs
+
+  """An array relationship"""
+  records(
+    """distinct select on columns"""
+    distinct_on: [records_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [records_order_by!]
+
+    """filter the rows returned"""
+    where: records_bool_exp
+  ): [records!]!
+
+  """An aggregate relationship"""
+  records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [records_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [records_order_by!]
+
+    """filter the rows returned"""
+    where: records_bool_exp
+  ): records_aggregate!
+
+  """fetch data from the table: "records" using primary key columns"""
+  records_by_pk(id: Int!): records
+
+  """
+  fetch data from the table: "users"
+  """
+  users(
+    """distinct select on columns"""
+    distinct_on: [users_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [users_order_by!]
+
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): [users!]!
+
+  """
+  fetch aggregated fields from the table: "users"
+  """
+  users_aggregate(
+    """distinct select on columns"""
+    distinct_on: [users_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [users_order_by!]
+
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): users_aggregate!
+
+  """fetch data from the table: "users" using primary key columns"""
+  users_by_pk(id: String!): users
+}
+
+"""
+columns and relationships of "records"
+"""
+type records {
+  """An object relationship"""
+  analysis_job: analysis_jobs
+  id: Int!
+  owned_by: String!
+  player_color: String!
+  sgf_text: String!
+
+  """An object relationship"""
+  user: users!
+}
+
+"""
+aggregated selection of "records"
+"""
+type records_aggregate {
+  aggregate: records_aggregate_fields
+  nodes: [records!]!
+}
+
+input records_aggregate_bool_exp {
+  count: records_aggregate_bool_exp_count
+}
+
+input records_aggregate_bool_exp_count {
+  arguments: [records_select_column!]
+  distinct: Boolean
+  filter: records_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "records"
+"""
+type records_aggregate_fields {
+  avg: records_avg_fields
+  count(columns: [records_select_column!], distinct: Boolean): Int!
+  max: records_max_fields
+  min: records_min_fields
+  stddev: records_stddev_fields
+  stddev_pop: records_stddev_pop_fields
+  stddev_samp: records_stddev_samp_fields
+  sum: records_sum_fields
+  var_pop: records_var_pop_fields
+  var_samp: records_var_samp_fields
+  variance: records_variance_fields
+}
+
+"""
+order by aggregate values of table "records"
+"""
+input records_aggregate_order_by {
+  avg: records_avg_order_by
+  count: order_by
+  max: records_max_order_by
+  min: records_min_order_by
+  stddev: records_stddev_order_by
+  stddev_pop: records_stddev_pop_order_by
+  stddev_samp: records_stddev_samp_order_by
+  sum: records_sum_order_by
+  var_pop: records_var_pop_order_by
+  var_samp: records_var_samp_order_by
+  variance: records_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "records"
+"""
+input records_arr_rel_insert_input {
+  data: [records_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: records_on_conflict
+}
+
+"""aggregate avg on columns"""
+type records_avg_fields {
+  id: Float
+}
+
+"""
+order by avg() on columns of table "records"
+"""
+input records_avg_order_by {
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "records". All fields are combined with a logical 'AND'.
+"""
+input records_bool_exp {
+  _and: [records_bool_exp!]
+  _not: records_bool_exp
+  _or: [records_bool_exp!]
+  analysis_job: analysis_jobs_bool_exp
+  id: Int_comparison_exp
+  owned_by: String_comparison_exp
+  player_color: String_comparison_exp
+  sgf_text: String_comparison_exp
+  user: users_bool_exp
+}
+
+"""
+unique or primary key constraints on table "records"
+"""
+enum records_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  records_pk
+}
+
+"""
+input type for incrementing numeric columns in table "records"
+"""
+input records_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "records"
+"""
+input records_insert_input {
+  analysis_job: analysis_jobs_obj_rel_insert_input
+  id: Int
+  owned_by: String
+  player_color: String
+  sgf_text: String
+  user: users_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type records_max_fields {
+  id: Int
+  owned_by: String
+  player_color: String
+  sgf_text: String
+}
+
+"""
+order by max() on columns of table "records"
+"""
+input records_max_order_by {
+  id: order_by
+  owned_by: order_by
+  player_color: order_by
+  sgf_text: order_by
+}
+
+"""aggregate min on columns"""
+type records_min_fields {
+  id: Int
+  owned_by: String
+  player_color: String
+  sgf_text: String
+}
+
+"""
+order by min() on columns of table "records"
+"""
+input records_min_order_by {
+  id: order_by
+  owned_by: order_by
+  player_color: order_by
+  sgf_text: order_by
+}
+
+"""
+response of any mutation on the table "records"
+"""
+type records_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [records!]!
+}
+
+"""
+input type for inserting object relation for remote table "records"
+"""
+input records_obj_rel_insert_input {
+  data: records_insert_input!
+
+  """upsert condition"""
+  on_conflict: records_on_conflict
+}
+
+"""
+on_conflict condition type for table "records"
+"""
+input records_on_conflict {
+  constraint: records_constraint!
+  update_columns: [records_update_column!]! = []
+  where: records_bool_exp
+}
+
+"""Ordering options when selecting data from "records"."""
+input records_order_by {
+  analysis_job: analysis_jobs_order_by
+  id: order_by
+  owned_by: order_by
+  player_color: order_by
+  sgf_text: order_by
+  user: users_order_by
+}
+
+"""primary key columns input for table: records"""
+input records_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "records"
+"""
+enum records_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  owned_by
+
+  """column name"""
+  player_color
+
+  """column name"""
+  sgf_text
+}
+
+"""
+input type for updating data in table "records"
+"""
+input records_set_input {
+  id: Int
+  owned_by: String
+  player_color: String
+  sgf_text: String
+}
+
+"""aggregate stddev on columns"""
+type records_stddev_fields {
+  id: Float
+}
+
+"""
+order by stddev() on columns of table "records"
+"""
+input records_stddev_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type records_stddev_pop_fields {
+  id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "records"
+"""
+input records_stddev_pop_order_by {
+  id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type records_stddev_samp_fields {
+  id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "records"
+"""
+input records_stddev_samp_order_by {
+  id: order_by
+}
+
+"""
+Streaming cursor of the table "records"
+"""
+input records_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: records_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input records_stream_cursor_value_input {
+  id: Int
+  owned_by: String
+  player_color: String
+  sgf_text: String
+}
+
+"""aggregate sum on columns"""
+type records_sum_fields {
+  id: Int
+}
+
+"""
+order by sum() on columns of table "records"
+"""
+input records_sum_order_by {
+  id: order_by
+}
+
+"""
+update columns of table "records"
+"""
+enum records_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  owned_by
+
+  """column name"""
+  player_color
+
+  """column name"""
+  sgf_text
+}
+
+input records_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: records_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: records_set_input
+
+  """filter the rows which have to be updated"""
+  where: records_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type records_var_pop_fields {
+  id: Float
+}
+
+"""
+order by var_pop() on columns of table "records"
+"""
+input records_var_pop_order_by {
+  id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type records_var_samp_fields {
+  id: Float
+}
+
+"""
+order by var_samp() on columns of table "records"
+"""
+input records_var_samp_order_by {
+  id: order_by
+}
+
+"""aggregate variance on columns"""
+type records_variance_fields {
+  id: Float
+}
+
+"""
+order by variance() on columns of table "records"
+"""
+input records_variance_order_by {
+  id: order_by
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "analysis"
+  """
+  analysis(
+    """distinct select on columns"""
+    distinct_on: [analysis_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [analysis_order_by!]
+
+    """filter the rows returned"""
+    where: analysis_bool_exp
+  ): [analysis!]!
+
+  """
+  fetch aggregated fields from the table: "analysis"
+  """
+  analysis_aggregate(
+    """distinct select on columns"""
+    distinct_on: [analysis_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [analysis_order_by!]
+
+    """filter the rows returned"""
+    where: analysis_bool_exp
+  ): analysis_aggregate!
+
+  """fetch data from the table: "analysis" using primary key columns"""
+  analysis_by_pk(id: Int!): analysis
+
+  """
+  fetch data from the table: "analysis_jobs"
+  """
+  analysis_jobs(
+    """distinct select on columns"""
+    distinct_on: [analysis_jobs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [analysis_jobs_order_by!]
+
+    """filter the rows returned"""
+    where: analysis_jobs_bool_exp
+  ): [analysis_jobs!]!
+
+  """
+  fetch aggregated fields from the table: "analysis_jobs"
+  """
+  analysis_jobs_aggregate(
+    """distinct select on columns"""
+    distinct_on: [analysis_jobs_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [analysis_jobs_order_by!]
+
+    """filter the rows returned"""
+    where: analysis_jobs_bool_exp
+  ): analysis_jobs_aggregate!
+
+  """fetch data from the table: "analysis_jobs" using primary key columns"""
+  analysis_jobs_by_pk(id: Int!): analysis_jobs
+
+  """
+  fetch data from the table in a streaming manner: "analysis_jobs"
+  """
+  analysis_jobs_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [analysis_jobs_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: analysis_jobs_bool_exp
+  ): [analysis_jobs!]!
+
+  """
+  fetch data from the table in a streaming manner: "analysis"
+  """
+  analysis_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [analysis_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: analysis_bool_exp
+  ): [analysis!]!
+
+  """An array relationship"""
+  records(
+    """distinct select on columns"""
+    distinct_on: [records_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [records_order_by!]
+
+    """filter the rows returned"""
+    where: records_bool_exp
+  ): [records!]!
+
+  """An aggregate relationship"""
+  records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [records_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [records_order_by!]
+
+    """filter the rows returned"""
+    where: records_bool_exp
+  ): records_aggregate!
+
+  """fetch data from the table: "records" using primary key columns"""
+  records_by_pk(id: Int!): records
+
+  """
+  fetch data from the table in a streaming manner: "records"
+  """
+  records_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [records_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: records_bool_exp
+  ): [records!]!
+
+  """
+  fetch data from the table: "users"
+  """
+  users(
+    """distinct select on columns"""
+    distinct_on: [users_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [users_order_by!]
+
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): [users!]!
+
+  """
+  fetch aggregated fields from the table: "users"
+  """
+  users_aggregate(
+    """distinct select on columns"""
+    distinct_on: [users_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [users_order_by!]
+
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): users_aggregate!
+
+  """fetch data from the table: "users" using primary key columns"""
+  users_by_pk(id: String!): users
+
+  """
+  fetch data from the table in a streaming manner: "users"
+  """
+  users_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [users_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): [users!]!
+}
+
+scalar timestamp
+
+"""
+Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'.
+"""
+input timestamp_comparison_exp {
+  _eq: timestamp
+  _gt: timestamp
+  _gte: timestamp
+  _in: [timestamp!]
+  _is_null: Boolean
+  _lt: timestamp
+  _lte: timestamp
+  _neq: timestamp
+  _nin: [timestamp!]
+}
+
+"""
+columns and relationships of "users"
+"""
+type users {
+  id: String!
+  name: String!
+
+  """An array relationship"""
+  records(
+    """distinct select on columns"""
+    distinct_on: [records_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [records_order_by!]
+
+    """filter the rows returned"""
+    where: records_bool_exp
+  ): [records!]!
+
+  """An aggregate relationship"""
+  records_aggregate(
+    """distinct select on columns"""
+    distinct_on: [records_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [records_order_by!]
+
+    """filter the rows returned"""
+    where: records_bool_exp
+  ): records_aggregate!
+}
+
+"""
+aggregated selection of "users"
+"""
+type users_aggregate {
+  aggregate: users_aggregate_fields
+  nodes: [users!]!
+}
+
+"""
+aggregate fields of "users"
+"""
+type users_aggregate_fields {
+  count(columns: [users_select_column!], distinct: Boolean): Int!
+  max: users_max_fields
+  min: users_min_fields
+}
+
+"""
+Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'.
+"""
+input users_bool_exp {
+  _and: [users_bool_exp!]
+  _not: users_bool_exp
+  _or: [users_bool_exp!]
+  id: String_comparison_exp
+  name: String_comparison_exp
+  records: records_bool_exp
+  records_aggregate: records_aggregate_bool_exp
+}
+
+"""
+unique or primary key constraints on table "users"
+"""
+enum users_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  users_pk
+}
+
+"""
+input type for inserting data into table "users"
+"""
+input users_insert_input {
+  id: String
+  name: String
+  records: records_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type users_max_fields {
+  id: String
+  name: String
+}
+
+"""aggregate min on columns"""
+type users_min_fields {
+  id: String
+  name: String
+}
+
+"""
+response of any mutation on the table "users"
+"""
+type users_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [users!]!
+}
+
+"""
+input type for inserting object relation for remote table "users"
+"""
+input users_obj_rel_insert_input {
+  data: users_insert_input!
+
+  """upsert condition"""
+  on_conflict: users_on_conflict
+}
+
+"""
+on_conflict condition type for table "users"
+"""
+input users_on_conflict {
+  constraint: users_constraint!
+  update_columns: [users_update_column!]! = []
+  where: users_bool_exp
+}
+
+"""Ordering options when selecting data from "users"."""
+input users_order_by {
+  id: order_by
+  name: order_by
+  records_aggregate: records_aggregate_order_by
+}
+
+"""primary key columns input for table: users"""
+input users_pk_columns_input {
+  id: String!
+}
+
+"""
+select columns of table "users"
+"""
+enum users_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "users"
+"""
+input users_set_input {
+  id: String
+  name: String
+}
+
+"""
+Streaming cursor of the table "users"
+"""
+input users_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: users_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input users_stream_cursor_value_input {
+  id: String
+  name: String
+}
+
+"""
+update columns of table "users"
+"""
+enum users_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+input users_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: users_set_input
+
+  """filter the rows which have to be updated"""
+  where: users_bool_exp!
+}
+

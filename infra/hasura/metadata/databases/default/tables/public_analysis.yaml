@@ -1,0 +1,25 @@
+table:
+  name: analysis
+  schema: public
+object_relationships:
+  - name: record
+    using:
+      foreign_key_constraint_on: record_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - move
+        - prior
+        - score_lead
+        - utility
+        - winrate
+        - id
+        - record_id
+        - turn_number
+        - visits
+      filter:
+        record:
+          owned_by:
+            _eq: X-Hasura-User-Id
+    comment: ""

@@ -1,0 +1,17 @@
+[package]
+name = "analyzer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dotenv = "0.15"
+chrono = { version = "0.4", features = ["serde"] }
+tokio = { version = "1.32", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sgf-parse = "4.2"
+reqwest = "0.11"
+graphql_client = { version = "0.13", features = ["reqwest"] }
+
+# https://github.com/dragonflyoss/image-service/commit/81e3ce530963cc86f0ab0d1c8abbcbd6627c89d6
+openssl = { version = "0.10", features = ["vendored"] }

@@ -1,0 +1,5 @@
+mutation FinishAnalyzing($pk: Int!, $finishedAt: timestamp!) {
+    update_analysis_jobs_by_pk(pk_columns: {id: $pk}, _set: {finished_at: $finishedAt, error_message: null}) {
+        id
+    }
+}

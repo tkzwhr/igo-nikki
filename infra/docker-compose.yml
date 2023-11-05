@@ -8,18 +8,19 @@ services:
       - "5432:5432"
     volumes:
       - ./postgresql:/docker-entrypoint-initdb.d
+      - /var/tmp/igo-nikki/db:/var/lib/postgresql/data
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "test `psql -U postgres igo_nikki_test -c '\\dt' -t | wc -l` = 3"]
+      test: ["CMD-SHELL", "test `psql -U postgres igo_nikki -c '\\dt' -t | wc -l` = 5"]
       interval: 1s
       timeout: 30s
       retries: 10
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
       TZ: "Asia/Tokyo"
-  hasura: &hasura
+  hasura:
     container_name: hasura
-    image: hasura/graphql-engine:v2.30.1.cli-migrations-v3.ubuntu
+    image: hasura/graphql-engine:v2.34.0.cli-migrations-v3.ubuntu
     ports:
       - "20180:8080"
     volumes:
@@ -42,11 +43,15 @@ services:
         }
       # TZが使えないので、 allowed_skew で時間のチェックをごまかす
       # TZ: "Asia/Tokyo"
-  hasura-test:
-    <<: *hasura
-    container_name: hasura-test
-    ports:
-      - "20181:8080"
-    environment:
-      <<: *environment
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgresql:5432/igo_nikki_test
+  katago:
+    container_name: katago
+    build: katago
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

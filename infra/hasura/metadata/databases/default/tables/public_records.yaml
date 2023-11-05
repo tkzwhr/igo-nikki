@@ -2,6 +2,13 @@ table:
   name: records
   schema: public
 object_relationships:
+  - name: analysis_job
+    using:
+      foreign_key_constraint_on:
+        column: record_id
+        table:
+          name: analysis_jobs
+          schema: public
   - name: user
     using:
       foreign_key_constraint_on: owned_by
