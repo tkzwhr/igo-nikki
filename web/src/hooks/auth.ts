@@ -7,10 +7,10 @@ type AuthBasis = {
   act: () => Promise<void>;
 };
 
-type AuthState =
+export type AuthState =
   | { loading: true }
   | (AuthBasis & { isAuthenticated: false })
-  | (AuthBasis & { isAuthenticated: true; userName: string });
+  | (AuthBasis & { isAuthenticated: true; userId: string; userName: string });
 
 export default function useAuth(): AuthState {
   const {
@@ -29,16 +29,6 @@ export default function useAuth(): AuthState {
     });
   }, [user]);
 
-  if (import.meta.env.VITE_BYPASS_AUTH0) {
-    return {
-      loading: false,
-      isAuthenticated: true,
-      token: import.meta.env.VITE_HASURA_TOKEN,
-      userName: 'Test User',
-      act: () => Promise.resolve(),
-    };
-  }
-
   if (isLoading || tokenState.loading) {
     return { loading: true };
   }
@@ -55,6 +45,7 @@ export default function useAuth(): AuthState {
     loading: false,
     isAuthenticated: true,
     token: tokenState.value,
+    userId: user?.sub ?? '',
     userName: user?.name ?? '',
     act: logout,
   };

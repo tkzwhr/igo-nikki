@@ -1,10 +1,3 @@
-import { PlayerColor } from '@/helpers/sgf.helper';
-
-export type ImportData = {
-  sgf: string;
-  playerColor: PlayerColor;
-};
-
 export async function readFile(file: File): Promise<string> {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -25,7 +18,10 @@ export function isValidCosumiUrl(url: string): boolean {
   return url.match(/^https:\/\/www.cosumi.net\/replay\//) !== null;
 }
 
-export function parseCosumiUrl(url: string): string {
+export function parseCosumiUrl(url: string): {
+  sgfText: string;
+  playerIsBlack: boolean;
+} {
   const parsed = new URL(url);
   const SZ = parsed.searchParams.get('bs')!;
   const PB = parsed.searchParams.get('b')!;
@@ -46,5 +42,11 @@ export function parseCosumiUrl(url: string): string {
     })
     .join('');
 
-  return `(;GM[1]FF[4]GN[COSUMIでの対局]PB[${PB}]PW[${PW}]SZ[${SZ}]KM[${KM}]RE[${RE}]${pointsStr})`;
+  const sgfText = `(;GM[1]FF[4]GN[COSUMIでの対局]PB[${PB}]PW[${PW}]SZ[${SZ}]KM[${KM}]RE[${RE}]${pointsStr})`;
+  const playerIsBlack = PB === 'You';
+
+  return {
+    sgfText,
+    playerIsBlack,
+  };
 }

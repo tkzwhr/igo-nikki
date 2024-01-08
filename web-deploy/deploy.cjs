@@ -6,7 +6,7 @@ const config = {
   port: 21,
   user: process.env.HOME_FTP_USER,
   password: process.env.HOME_FTP_PASSWD,
-  localRoot: __dirname + '/dist',
+  localRoot: __dirname + '/../web/dist',
   remoteRoot: '/www/igo-nikki',
   include: ['*', '**/*'],
   exclude: [],

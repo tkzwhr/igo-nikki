@@ -1,0 +1,12 @@
+{
+  "name": "igo_nikki_web_deploy",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "deploy": "node ./deploy.cjs"
+  },
+  "devDependencies": {
+    "ftp-deploy": "^2.4.5"
+  }
+}

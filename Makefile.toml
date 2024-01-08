@@ -6,48 +6,80 @@ args = ["compose", "-f", "infra/docker-compose.yml", "up", "-d"]
 command = "docker"
 args = ["compose", "-f", "infra/docker-compose.yml", "down"]
 
-[tasks.front_bypass]
+[tasks.front-copy-resources]
+script = '''
+cp graphql/queries/*.graphql web/src/graphql
+'''
+
+[tasks.front-install]
 cwd = "web"
 command = "yarn"
-args = ["run", "dev:bypass"]
+args = ["install"]
 
-[tasks.front.run_task]
-name = ["front_dev", "ngrok"]
-fork = true
-parallel = true
-
-[tasks.front_dev]
+[tasks.front-dev]
+env = { "VITE_AUTH0" = "0", "VITE_API_HOST" = "http://localhost:20180/v1/graphql", "VITE_DEV_USER" = "${CARGO_MAKE_TASK_ARGS}" }
 cwd = "web"
 command = "yarn"
 args = ["run", "dev"]
+dependencies = ["front-copy-resources", "front-install"]
+
+[tasks.front-dev-auth0.run_task]
+name = ["front-dev-https", "ngrok"]
+fork = true
+parallel = true
+
+[tasks.front-dev-https]
+env = { "VITE_API_HOST" = "http://localhost:20180/v1/graphql" }
+cwd = "web"
+command = "yarn"
+args = ["run", "dev"]
+dependencies = ["front-copy-resources", "front-install"]
+
+[tasks.front-build]
+env = { "VITE_API_HOST" = "https://igo-nikki-api.teruru.net/v1/graphql" }
+cwd = "web"
+command = "yarn"
+args = ["run", "build"]
+dependencies = ["front-copy-resources", "front-install"]
+
+[tasks.front-deploy]
+cwd = "web-deploy"
+command = "yarn"
+args = ["run", "deploy"]
+dependencies = ["front-build", "front-deploy-install"]
+
+[tasks.front-deploy-install]
+cwd = "web-deploy"
+command = "yarn"
+args = ["install"]
 
 [tasks.ngrok]
 command = "ngrok"
 args = ["http", "20180"]
 
-[tasks.build_analyzer]
-command = "docker"
-args = ["build", "-f", "infra/analyzer/Dockerfile", "-t", "igo-nikki-analyzer", "."]
-
-[tasks.analyze]
+[tasks.analyzer-run]
 cwd = "analyzer"
 command = "cargo"
 args = ["run"]
 
-[tasks.update_hasura_metadata]
+[tasks.analyzer-build]
+command = "docker"
+args = ["build", "-f", "infra/analyzer/Dockerfile", "-t", "igo-nikki-analyzer", "."]
+
+[tasks.hasura_metadata-update]
 cwd = "infra/hasura"
 script = '''
 rm -rf metadata
 hasura --skip-update-check metadata export --admin-secret hasura
 '''
 
-[tasks.update_graphql_schema]
+[tasks.graphql_schema-update]
 cwd = "graphql"
 script = '''
 npx graphqurl http://localhost:20180/v1/graphql -H "X-Hasura-Admin-Secret: hasura" --introspect > schema.graphql
 '''
 
-[tasks.create_user]
+[tasks.create-user]
 script = '''
 QUERY='
 mutation RegisterUser($id: String!) {

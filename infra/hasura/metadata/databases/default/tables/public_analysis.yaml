@@ -23,3 +23,11 @@ select_permissions:
           owned_by:
             _eq: X-Hasura-User-Id
     comment: ""
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        record:
+          owned_by:
+            _eq: X-Hasura-User-Id
+    comment: ""

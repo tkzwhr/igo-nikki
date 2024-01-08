@@ -1,0 +1,5 @@
+mutation InsertRecord($sgf: String!, $playerColor: String!) {
+    insert_records_one(object: { sgf_text: $sgf, player_color: $playerColor }) {
+        id
+    }
+}

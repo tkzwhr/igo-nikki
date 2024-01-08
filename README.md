@@ -75,44 +75,42 @@ cargo make down
 
 ### フロントエンド開発
 
+事前にユーザーを作っておく必要がある。（1度だけ）
+
 ```shell
-cargo make front
+cargo make create-user <ID>
+```
+
+適当に整数を決めて、 `ID` に指定する。
+
+同じ整数を使って起動する。
+
+```shell
+cargo make front-dev <ID>
+```
+
+#### Auth0を使う
+
+```shell
+cargo make front-dev-auth0
 ```
 
 ngrokのエンドポイントのURLが表示されたらAuth0側に設定する。
 
 Actions > Library > Custom を開き、 `sign-in` のactionのSecretsにある `entrypoint` を書き換える。
 
-#### Auth0のバイパス
-
-Auth0をバイパスしたい場合は、下記の通りAPIデバッガーを利用する。
-
-https://hasura.io/learn/ja/graphql/hasura/authentication/5-test-with-headers/
-
-`access_token` が取得できたら、 `web/.env.development.local` を作成する。
-
-```
-VITE_BYPASS_AUTH0=1
-VITE_HASURA_TOKEN=<上記で取得したaccess_token>
-```
-
-DBにユーザーを作成してバイパス用のコマンドで起動する。
-
-```shell
-cargo make create_user <ユーザーID>
-cargo make front_bypass
-```
-
 ### 解析器開発
 
 `analyzer/.env` を作成する。
 
 ```
+cat > analyzer/.env << "EOM"
 GRAPHQL_HOST=http://localhost:20180/v1/graphql
 GRAPHQL_ADMIN_SECRET=hasura
 ANALYZER_COMMAND=docker
 ANALYZER_OPTIONS="exec -i katago ./katago analysis -model default_model.bin.gz -config analysis.cfg"
 MOVE_PER_TURNS=3
+EOM
 ```
 
 起動する。
@@ -124,17 +122,17 @@ cargo make analyze
 ### 解析器のビルド
 
 ```shell
-cargo make build_analyzer
+cargo make analyzer-build
 ```
 
 ### Hasura Metadataの更新
 
 ```shell
-cargo make update_hasura_metadata
+cargo make hasura_metadata-update
 ```
 
 ### GraphQL Schemaの更新
 
 ```shell
-cargo make update_graphql_schema
+cargo make graphql_schema-update
 ```

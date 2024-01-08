@@ -1,4 +1,10 @@
-import { useEffect, useRef } from 'react';
+import {
+  ForwardedRef,
+  forwardRef,
+  MutableRefObject,
+  useEffect,
+  useRef,
+} from 'react';
 import styled from 'styled-components';
 
 const WGoPlayer = (window as any).WGo.BasicPlayer;
@@ -8,7 +14,7 @@ type Props = {
   simplified?: boolean;
 };
 
-const Styled = styled.div`
+const StyledDiv = styled.div`
   .no-info {
     .wgo-gameinfo {
       top: 0;
@@ -20,8 +26,8 @@ const Styled = styled.div`
   }
 `;
 
-export default function GoPlayer(props: Props) {
-  const player = useRef(null);
+function Inner(props: Props, ref: ForwardedRef<any>) {
+  const playerRef = useRef(null);
 
   useEffect(() => {
     let layout: Record<string, string[]> = {
@@ -35,20 +41,29 @@ export default function GoPlayer(props: Props) {
       };
     }
 
-    new WGoPlayer(player.current, {
-      sgf: props.sgf,
-      layout,
-    });
+    if (ref) {
+      (ref as MutableRefObject<any>).current = new WGoPlayer(
+        playerRef.current,
+        {
+          sgf: props.sgf,
+          layout,
+        },
+      );
+    }
   }, [props.sgf]);
 
   return (
-    <Styled>
+    <StyledDiv>
       <div
-        ref={player}
+        ref={playerRef}
         className={props.simplified ? '' : 'wgo-twocols no-info'}
       >
         ご使用のブラウザはWGo.jsに対応していません。
       </div>
-    </Styled>
+    </StyledDiv>
   );
 }
+
+const GoPlayer = forwardRef(Inner);
+
+export default GoPlayer;

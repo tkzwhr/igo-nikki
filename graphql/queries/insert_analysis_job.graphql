@@ -1,0 +1,5 @@
+mutation InsertAnalysisJob($recordId: Int!) {
+    insert_analysis_jobs_one(object: {record_id: $recordId}) {
+        id
+    }
+}

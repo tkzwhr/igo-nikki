@@ -35,7 +35,7 @@ pub async fn analyze() {
 
     let analysis_job = match store::get_analysis_job::request().await {
         Ok(data) => {
-            println!("found. id={}", data.id);
+            println!("found. id={}, record_id={}", data.id, data.record_id);
             data
         }
         Err(err) => {
@@ -59,13 +59,13 @@ pub async fn analyze() {
     let sgf = match sgf::ParsedSGF::try_from(analysis_job.record.sgf_text.as_ref()) {
         Ok(sgf) => sgf,
         Err(_) => {
-            eprintln!("invalid sgf text found. id={}", analysis_job.id);
+            eprintln!("invalid sgf text found. id={}, record_id={}", analysis_job.id, analysis_job.record_id);
             store::fail_analyzing::request(analysis_job.id, "invalid sgf text".to_string()).await.expect("request error: fail analyzing.");
             return;
         }
     };
     let query: models::Query = sgf.into();
-    let query = query.with_id(analysis_job.id.to_string());
+    let query = query.with_id(analysis_job.record_id.to_string());
 
     // launch process
 
