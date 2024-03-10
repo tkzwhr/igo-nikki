@@ -34,7 +34,7 @@ export default function AnalysisChart(props: Props) {
       [turn0],
     );
   }, [props.data]);
-  const maxScoreLead =
+  const maxScoreLead = Math.round(
     useMemo(
       () =>
         data.reduce(
@@ -43,48 +43,82 @@ export default function AnalysisChart(props: Props) {
           0,
         ),
       [data],
-    ) * 1.2;
+    ) * 1.2,
+  );
 
-  const handlePlotEvent = (_: any, event: any) => {
-    if (event.type === 'tooltip:show') {
+  const handlePlotEvent = (data: any) => {
+    data.chart.on('tooltip:show', (ev: any) => {
       try {
-        const turn = parseInt(event.data.title);
+        const turn = parseInt(ev.data.data.x);
         props.onTurnUpdate?.(turn);
       } catch (e) {
         console.warn(e);
       }
-    }
+    });
   };
 
   return (
     <DualAxes
       width={400}
-      height={200}
-      data={[data, data]}
+      height={250}
+      data={data}
+      legend={true}
       xField="turn"
-      yField={['winrate', 'score_lead']}
-      meta={{
-        winrate: {
-          min: 0,
-          max: 1,
-          formatter: (v: number) => {
-            if (v > 0.5) {
-              return `黒 ${v * 100}%`;
-            }
-            if (v < 0.5) {
-              return `白 ${(1 - v) * 100}%`;
-            }
-            return '50%';
+      onReady={handlePlotEvent}
+    >
+      {[
+        {
+          type: 'line',
+          yField: 'winrate',
+          shapeField: 'smooth',
+          axis: {
+            y: {
+              position: 'right',
+              title: '勝率',
+              labelFormatter: (v: number) => {
+                if (v > 0.5) {
+                  return `黒 ${v * 100}%`;
+                }
+                if (v < 0.5) {
+                  return `白 ${(1 - v) * 100}%`;
+                }
+                return '50%';
+              },
+            },
           },
-          alias: '勝率',
+          scale: {
+            y: {
+              type: 'linear',
+              domain: [0, 1],
+              tickMethod: () => [0, 0.25, 0.5, 0.75, 1.0],
+            },
+          },
         },
-        score_lead: {
-          min: -maxScoreLead,
-          max: maxScoreLead,
-          alias: '目差',
+        {
+          type: 'line',
+          yField: 'score_lead',
+          shapeField: 'hvh',
+          axis: {
+            y: {
+              position: 'left',
+              title: '目差',
+            },
+          },
+          scale: {
+            y: {
+              type: 'linear',
+              domain: [-maxScoreLead, maxScoreLead],
+              tickMethod: () => [
+                -maxScoreLead,
+                -maxScoreLead / 2,
+                0,
+                maxScoreLead / 2,
+                maxScoreLead,
+              ],
+            },
+          },
         },
-      }}
-      onEvent={handlePlotEvent}
-    />
+      ]}
+    </DualAxes>
   );
 }

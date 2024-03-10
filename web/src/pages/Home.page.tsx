@@ -1,6 +1,7 @@
 import { Button, Card, Empty, FloatButton, Skeleton, Space } from 'antd';
 import React, { Suspense, useCallback } from 'react';
 
+import ActionMenuContainer from '@/containers/ActionMenu.container';
 import AnalysisContainer from '@/containers/Analysis.container';
 import BoardContainer from '@/containers/Board.container';
 import GameListContainer from '@/containers/GameList.container';
@@ -33,7 +34,10 @@ function Inner() {
   return (
     <HomeContext.Provider value={reducer}>
       <Space align="start">
-        <GameListContainer />
+        <Space direction="vertical">
+          <GameListContainer />
+          <ActionMenuContainer />
+        </Space>
         <BoardContainer />
         <AnalysisContainer />
       </Space>
