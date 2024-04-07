@@ -35,24 +35,6 @@ command = "yarn"
 args = ["run", "dev"]
 dependencies = ["front-copy-resources", "front-install"]
 
-[tasks.front-build]
-env = { "VITE_API_HOST" = "https://igo-nikki-api.teruru.net/v1/graphql" }
-cwd = "web"
-command = "yarn"
-args = ["run", "build"]
-dependencies = ["front-copy-resources", "front-install"]
-
-[tasks.front-deploy]
-cwd = "web-deploy"
-command = "yarn"
-args = ["run", "deploy"]
-dependencies = ["front-build", "front-deploy-install"]
-
-[tasks.front-deploy-install]
-cwd = "web-deploy"
-command = "yarn"
-args = ["install"]
-
 [tasks.ngrok]
 command = "ngrok"
 args = ["http", "20180"]
