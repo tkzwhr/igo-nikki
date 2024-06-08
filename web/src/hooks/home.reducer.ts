@@ -52,6 +52,7 @@ const fn = (store: Store, action: Action): Store => {
     case 'SET_RECORDS': {
       const records = action.data.map((record) => {
         const gameData = GameData.parse(record.sgf_text);
+        const rawDate = gameData?.playedAt ?? new Date(0);
         const date =
           gameData?.playedAt !== undefined
             ? format(gameData?.playedAt, 'yyyy年M月d日')
@@ -67,10 +68,12 @@ const fn = (store: Store, action: Action): Store => {
         return {
           ...record,
           gameName,
+          rawDate,
           date,
           won,
         };
       });
+      records.sort((a, b) => b.rawDate - a.rawDate);
       return { ...store, records };
     }
     case 'SET_RECORD_ID':
