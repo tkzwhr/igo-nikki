@@ -16,7 +16,7 @@ export function mergeAnalysis(
   let node = sgfNode[0];
   let turn = 0;
 
-  const size = Number.parseInt(node.data.SZ?.[0].split(":")[0]);
+  const size = Number.parseInt(node.data.SZ?.[0].split(":")[0] ?? "");
 
   while (node !== undefined) {
     const data = analysis.filter((a) => a.turn_number === turn);
