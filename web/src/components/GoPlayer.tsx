@@ -1,12 +1,13 @@
 import {
-  ForwardedRef,
+  type ForwardedRef,
+  type MutableRefObject,
   forwardRef,
-  MutableRefObject,
   useEffect,
   useRef,
-} from 'react';
-import styled from 'styled-components';
+} from "react";
+import styled from "styled-components";
 
+// biome-ignore lint/suspicious/noExplicitAny: ignore
 const WGoPlayer = (window as any).WGo.BasicPlayer;
 
 type Props = {
@@ -26,22 +27,24 @@ const StyledDiv = styled.div`
   }
 `;
 
+// biome-ignore lint/suspicious/noExplicitAny: ignore
 function Inner(props: Props, ref: ForwardedRef<any>) {
   const playerRef = useRef(null);
 
   useEffect(() => {
     let layout: Record<string, string[]> = {
-      bottom: ['Control'],
-      right: ['CommentBox'],
+      bottom: ["Control"],
+      right: ["CommentBox"],
     };
 
     if (props.simplified) {
       layout = {
-        bottom: ['Control'],
+        bottom: ["Control"],
       };
     }
 
     if (ref) {
+      // biome-ignore lint/suspicious/noExplicitAny: ignore
       (ref as MutableRefObject<any>).current = new WGoPlayer(
         playerRef.current,
         {
@@ -50,13 +53,13 @@ function Inner(props: Props, ref: ForwardedRef<any>) {
         },
       );
     }
-  }, [props.sgf]);
+  }, [props.sgf, props.simplified, ref]);
 
   return (
     <StyledDiv>
       <div
         ref={playerRef}
-        className={props.simplified ? '' : 'wgo-twocols no-info'}
+        className={props.simplified ? "" : "wgo-twocols no-info"}
       >
         ご使用のブラウザはWGo.jsに対応していません。
       </div>

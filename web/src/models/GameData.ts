@@ -1,12 +1,12 @@
-import { Property } from '@sabaki/sgf';
-import { parse as parseSgf, stringify as stringifySgf } from '@sabaki/sgf';
-import { format, parse as parseDate } from 'date-fns';
+import type { Property } from "@sabaki/sgf";
+import { parse as parseSgf, stringify as stringifySgf } from "@sabaki/sgf";
+import { format, parse as parseDate } from "date-fns";
 
-export type PlayerColor = 'BLACK' | 'WHITE';
+export type PlayerColor = "BLACK" | "WHITE";
 export type GameResult =
-  | { type: 'draw' }
-  | { type: 'resign'; color: PlayerColor }
-  | { type: 'winsByPoints'; color: PlayerColor; points: number };
+  | { type: "draw" }
+  | { type: "resign"; color: PlayerColor }
+  | { type: "winsByPoints"; color: PlayerColor; points: number };
 
 export default class GameData {
   constructor(
@@ -58,20 +58,20 @@ export default class GameData {
       }
     };
 
-    updateProp(this.gameName, 'GN');
-    updateProp(this.gameComment, 'GC');
-    updateProp(this.blackPlayer, 'PB');
-    updateProp(this.whitePlayer, 'PW');
+    updateProp(this.gameName, "GN");
+    updateProp(this.gameComment, "GC");
+    updateProp(this.blackPlayer, "PB");
+    updateProp(this.whitePlayer, "PW");
     updateProp(
-      this.playedAt ? format(this.playedAt, 'yyyy-MM-dd') : undefined,
-      'DT',
+      this.playedAt ? format(this.playedAt, "yyyy-MM-dd") : undefined,
+      "DT",
     );
     updateProp(
-      this.handicap?.startsWith('no') ? undefined : this.handicap,
-      'HA',
+      this.handicap?.startsWith("no") ? undefined : this.handicap,
+      "HA",
     );
-    updateProp(this.komi, 'KM');
-    updateProp(serializeGameResult(this.result), 'RE');
+    updateProp(this.komi, "KM");
+    updateProp(serializeGameResult(this.result), "RE");
 
     return trim(stringifySgf([node]));
   }
@@ -91,7 +91,7 @@ export default class GameData {
       sgfText,
       parsed[0].data.GN?.[0],
       parsed[0].data.GC?.[0],
-      playerColor ?? 'BLACK',
+      playerColor ?? "BLACK",
       parsed[0].data.PB?.[0],
       parsed[0].data.PW?.[0],
       deserializeDate(parsed[0].data.DT?.[0]),
@@ -107,7 +107,7 @@ function deserializeDate(text: string | undefined): Date | undefined {
     return undefined;
   }
 
-  return parseDate(text, 'yyyy-MM-dd', new Date());
+  return parseDate(text, "yyyy-MM-dd", new Date());
 }
 
 function serializeGameResult(
@@ -118,11 +118,11 @@ function serializeGameResult(
   }
 
   switch (gameResult.type) {
-    case 'draw':
-      return '0';
-    case 'resign':
+    case "draw":
+      return "0";
+    case "resign":
       return `${gameResult.color.toUpperCase().charAt(0)}+R`;
-    case 'winsByPoints':
+    case "winsByPoints":
       return `${gameResult.color.toUpperCase().charAt(0)}+${gameResult.points}`;
   }
 }
@@ -136,21 +136,21 @@ function deserializeGameResult(
 
   let result: GameResult;
 
-  if (gameResultText === '0') {
-    result = { type: 'draw' };
+  if (gameResultText === "0") {
+    result = { type: "draw" };
   } else {
-    const [color, points] = gameResultText.split('+');
+    const [color, points] = gameResultText.split("+");
 
-    if (points.toUpperCase() === 'R') {
+    if (points.toUpperCase() === "R") {
       result = {
-        type: 'resign',
-        color: color.toUpperCase() === 'B' ? 'BLACK' : 'WHITE',
+        type: "resign",
+        color: color.toUpperCase() === "B" ? "BLACK" : "WHITE",
       };
     } else {
       result = {
-        type: 'winsByPoints',
-        color: color.toUpperCase() === 'B' ? 'BLACK' : 'WHITE',
-        points: parseFloat(points),
+        type: "winsByPoints",
+        color: color.toUpperCase() === "B" ? "BLACK" : "WHITE",
+        points: Number.parseFloat(points),
       };
     }
   }
@@ -162,5 +162,5 @@ function trim(text: string): string {
   return text
     .split(/\n/)
     .map((v) => v.trim())
-    .join('');
+    .join("");
 }

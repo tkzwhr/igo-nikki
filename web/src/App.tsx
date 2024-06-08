@@ -1,12 +1,13 @@
-import { ApolloProvider } from '@apollo/client';
-import { Button, Menu, Space, Spin } from 'antd';
-import React, { createContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { ApolloProvider } from "@apollo/client";
+import { Button, Menu, Space, Spin } from "antd";
+import type React from "react";
+import { createContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import AppLayout from '@/AppLayout';
-import useAuth, { AuthState } from '@/hooks/auth';
-import useGQLClient from '@/hooks/gqlclient';
-import { PAGES } from '@/hooks/router';
+import AppLayout from "@/AppLayout";
+import useAuth, { type AuthState } from "@/hooks/auth";
+import useGQLClient from "@/hooks/gqlclient";
+import { PAGES } from "@/hooks/router";
 
 type AppContextValueType = {
   userId: string;
@@ -34,22 +35,22 @@ function Inner({
 
   if (authState.loading) {
     return (
-      <AppLayout header={<></>}>
+      <AppLayout header={<div />}>
         <Spin size="large">
-          <div></div>
+          <div />
         </Spin>
       </AppLayout>
     );
   }
 
-  if (authState.isAuthenticated && location.pathname === '/sign-in') {
-    navigate('/', { replace: true });
-    return <div></div>;
+  if (authState.isAuthenticated && location.pathname === "/sign-in") {
+    navigate("/", { replace: true });
+    return <div />;
   }
 
-  if (!authState.isAuthenticated && location.pathname !== '/sign-in') {
-    navigate('/sign-in', { replace: true });
-    return <div></div>;
+  if (!authState.isAuthenticated && location.pathname !== "/sign-in") {
+    navigate("/sign-in", { replace: true });
+    return <div />;
   }
 
   const selectedKeys = PAGES.filter(
@@ -64,7 +65,7 @@ function Inner({
         <Menu
           theme="dark"
           mode="horizontal"
-          style={{ float: 'left' }}
+          style={{ float: "left" }}
           items={items}
           defaultSelectedKeys={selectedKeys}
           onClick={(item) => navigate(item.key, { replace: true })}

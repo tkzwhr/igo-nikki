@@ -1,5 +1,5 @@
 export function enableAuth0(): boolean {
-  return import.meta.env.VITE_AUTH0 !== '0';
+  return import.meta.env.VITE_AUTH0 !== "0";
 }
 
 export function getApiHost(): string {
@@ -12,6 +12,6 @@ export function getDevUser(): string | null {
 
 export function getAuth0ClientId(): string {
   return import.meta.env.PROD
-    ? 'qKlGozLJqeTFWz42jQ2Hkq2vEDtt84pI'
-    : 'llt7XkgStntAhwjtH6euVr7izGI5C26P';
+    ? "qKlGozLJqeTFWz42jQ2Hkq2vEDtt84pI"
+    : "llt7XkgStntAhwjtH6euVr7izGI5C26P";
 }

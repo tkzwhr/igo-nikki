@@ -1,19 +1,20 @@
-import { useSuspenseQuery } from '@apollo/client';
-import { Alert, Button, Card, Radio, Space, Spin } from 'antd';
-import { format } from 'date-fns';
-import React, { Suspense, useContext } from 'react';
+import { useSuspenseQuery } from "@apollo/client";
+import { Alert, Button, Card, Radio, Space, Spin } from "antd";
+import { format } from "date-fns";
+import React, { Suspense, useContext } from "react";
 
-import AnalysisChart from '@/components/AnalysisChart';
-import GetAnalysis from '@/graphql/get_analysis.graphql';
-import { HomeContext } from '@/hooks/home.reducer';
-import { useStorage } from '@/hooks/storage';
+import AnalysisChart from "@/components/AnalysisChart";
+import GetAnalysis from "@/graphql/get_analysis.graphql";
+import { HomeContext } from "@/hooks/home.reducer";
+import { useStorage } from "@/hooks/storage";
 
 function Inner() {
   const [store, dispatch] = useContext(HomeContext);
   const { insertAnalysisJob } = useStorage();
 
-  const record = store.records.find((r) => r.id === store.recordId)!;
+  const record = store.records.find((r) => r.id === store.recordId) ?? "";
 
+  // biome-ignore lint/suspicious/noExplicitAny: ignore
   const { data: analysis } = useSuspenseQuery<any>(GetAnalysis, {
     variables: { recordId: record.id },
   });
@@ -27,12 +28,12 @@ function Inner() {
   }
 
   if (!record.analysis_job.finished_at) {
-    let startedAt = '解析待機中...';
+    let startedAt = "解析待機中...";
 
     if (record.analysis_job.started_at) {
       startedAt = format(
         new Date(record.analysis_job.started_at),
-        'yyyy/M/d H:mm:ss 解析開始',
+        "yyyy/M/d H:mm:ss 解析開始",
       );
     }
 
@@ -52,13 +53,13 @@ function Inner() {
 
   const finishedAt = format(
     new Date(record.analysis_job.finished_at),
-    'yyyy/M/d H:mm:ss 解析完了',
+    "yyyy/M/d H:mm:ss 解析完了",
   );
   return (
     <Space direction="vertical">
-      <Alert message={finishedAt} type="success" showIcon></Alert>
+      <Alert message={finishedAt} type="success" showIcon />
       <AnalysisChart
-        data={analysis['analysis']}
+        data={analysis.analysis}
         onTurnUpdate={(turn) => store.goPlayerRef.current.goTo(turn)}
       />
       <Space>
@@ -67,7 +68,7 @@ function Inner() {
           value={store.analysisDisplayMode}
           onChange={(evt) =>
             dispatch({
-              type: 'SET_ANALYSIS_DISPLAY_MODE',
+              type: "SET_ANALYSIS_DISPLAY_MODE",
               mode: evt.target.value,
             })
           }

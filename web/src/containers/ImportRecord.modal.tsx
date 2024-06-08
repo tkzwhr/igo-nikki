@@ -1,18 +1,18 @@
-import { Modal, Steps } from 'antd';
-import { useCallback, useContext, useState } from 'react';
-import styled from 'styled-components';
+import { Modal, Steps } from "antd";
+import { useCallback, useContext, useState } from "react";
+import styled from "styled-components";
 
-import EditGameInfo from '@/components/import-record/EditGameInfo';
-import SelectImportMethod from '@/components/import-record/SelectImportMethod';
-import { HomeContext } from '@/hooks/home.reducer';
-import { useStorage } from '@/hooks/storage';
-import GameData from '@/models/GameData';
+import EditGameInfo from "@/components/import-record/EditGameInfo";
+import SelectImportMethod from "@/components/import-record/SelectImportMethod";
+import { HomeContext } from "@/hooks/home.reducer";
+import { useStorage } from "@/hooks/storage";
+import type GameData from "@/models/GameData";
 
 const StyledDiv = styled.div`
   margin-top: 16px;
 `;
 
-const steps = [{ title: '方法の選択' }, { title: '詳細設定' }];
+const steps = [{ title: "方法の選択" }, { title: "詳細設定" }];
 const stepItems = steps.map((p) => ({ key: p.title, title: p.title }));
 
 export default function ImportRecordModal() {
@@ -28,11 +28,13 @@ export default function ImportRecordModal() {
   }, []);
 
   const doImport = useCallback(async () => {
-    dispatch({ type: 'SET_SHOWS_IMPORT_RECORD_MODAL', flag: false });
+    dispatch({ type: "SET_SHOWS_IMPORT_RECORD_MODAL", flag: false });
 
-    const data = updatedGameData ?? gameData!;
-    await insertRecord(data);
-  }, [gameData, updatedGameData]);
+    const data = updatedGameData ?? gameData;
+    if (data) {
+      await insertRecord(data);
+    }
+  }, [dispatch, gameData, insertRecord, updatedGameData]);
 
   const reset = useCallback(() => setPage(0), []);
 
@@ -43,7 +45,7 @@ export default function ImportRecordModal() {
       onOk={doImport}
       okButtonProps={{ disabled: page < steps.length - 1 }}
       onCancel={() =>
-        dispatch({ type: 'SET_SHOWS_IMPORT_RECORD_MODAL', flag: false })
+        dispatch({ type: "SET_SHOWS_IMPORT_RECORD_MODAL", flag: false })
       }
       afterClose={reset}
       width={720}

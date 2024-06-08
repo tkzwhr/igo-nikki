@@ -1,6 +1,6 @@
-import { Layout, Typography } from 'antd';
-import React from 'react';
-import styled from 'styled-components';
+import { Layout, Typography } from "antd";
+import type React from "react";
+import styled from "styled-components";
 
 const StyledLayout = styled(Layout)`
   height: 100vh;

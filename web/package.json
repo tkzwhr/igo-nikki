@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "lint": "biome check --files-ignore-unknown=true",
+    "check": "biome check --write --no-errors-on-unmatched",
     "prepare": "cd .. && husky install web/.husky"
   },
   "dependencies": {
@@ -44,14 +45,9 @@
     "vitest": "^1.6.0"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
+    "*.{ts,tsx}": ["check"]
   },
   "jest": {
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect"
-    ]
+    "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"]
   }
 }

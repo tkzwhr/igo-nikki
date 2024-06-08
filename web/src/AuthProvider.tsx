@@ -1,9 +1,9 @@
-import { Auth0Provider } from '@auth0/auth0-react';
-import React from 'react';
+import { Auth0Provider } from "@auth0/auth0-react";
+import type React from "react";
 
-import { enableAuth0, getAuth0ClientId } from '@/feature';
+import { enableAuth0, getAuth0ClientId } from "@/feature";
 
-const AUTH0_DOMAIN = 'igo-nikki.jp.auth0.com';
+const AUTH0_DOMAIN = "igo-nikki.jp.auth0.com";
 
 export default function AuthProvider({
   children,
@@ -22,7 +22,6 @@ export default function AuthProvider({
         {children}
       </Auth0Provider>
     );
-  } else {
-    return children;
   }
+  return children;
 }

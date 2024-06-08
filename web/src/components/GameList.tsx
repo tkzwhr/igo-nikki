@@ -1,9 +1,9 @@
-import { Menu } from 'antd';
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import { Menu } from "antd";
+import React, { useMemo } from "react";
+import styled from "styled-components";
 
-import { ListItem } from '@/components/ListItem';
-import { ExtendedRecord } from '@/hooks/home.reducer';
+import { ListItem } from "@/components/ListItem";
+import type { ExtendedRecord } from "@/hooks/home.reducer";
 
 type Props = {
   records: ExtendedRecord[];
@@ -18,23 +18,24 @@ const StyledMenu = styled(Menu)`
 
 export default function GameList(props: Props) {
   const menuItems = useMemo(() => {
-    const groupedRecords = groupBy(props.records, (v) => v.date ?? '(不明)');
+    const groupedRecords = groupBy(props.records, (v) => v.date ?? "(不明)");
     const arr = Array.from(groupedRecords.entries()).map(([key, value]) => ({
-      type: 'group',
+      type: "group",
       label: key,
       children: value.map((v) => ({
         key: v.id.toString(10),
         label: <ListItem data={v} onDelete={props.onDelete} />,
       })),
     }));
+    // biome-ignore lint/suspicious/noExplicitAny: ignore
     return arr as any;
-  }, [props.records]);
+  }, [props.records, props.onDelete]);
 
   return (
     <StyledMenu
       items={menuItems}
-      selectedKeys={[props.selectedId?.toString() ?? '']}
-      onSelect={(info) => props.onSelect(parseInt(info.key))}
+      selectedKeys={[props.selectedId?.toString() ?? ""]}
+      onSelect={(info) => props.onSelect(Number.parseInt(info.key))}
     />
   );
 }
