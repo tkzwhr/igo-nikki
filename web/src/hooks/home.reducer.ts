@@ -74,7 +74,7 @@ const fn = (store: Store, action: Action): Store => {
           won,
         };
       });
-      records.sort((a, b) => b.rawDate - a.rawDate);
+      records.sort((a, b) => b.rawDate.getTime() - a.rawDate.getTime());
       return { ...store, records };
     }
     case "SET_RECORD_ID":

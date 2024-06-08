@@ -16,7 +16,8 @@ const StyledCard = styled(Card)`
 function Inner() {
   const [store] = useContext(HomeContext);
 
-  const record = store.records.find((r) => r.id === store.recordId) ?? {};
+  // biome-ignore lint/style/noNonNullAssertion: ignore
+  const record = store.records.find((r) => r.id === store.recordId)!;
 
   // biome-ignore lint/suspicious/noExplicitAny: ignore
   const { data: analysis } = useSuspenseQuery<any>(GetAnalysis, {
