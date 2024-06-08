@@ -13,13 +13,13 @@ cp graphql/queries/*.graphql web/src/graphql
 
 [tasks.front-install]
 cwd = "web"
-command = "yarn"
+command = "bun"
 args = ["install"]
 
 [tasks.front-dev]
 env = { "VITE_AUTH0" = "0", "VITE_API_HOST" = "http://localhost:20180/v1/graphql", "VITE_DEV_USER" = "${CARGO_MAKE_TASK_ARGS}" }
 cwd = "web"
-command = "yarn"
+command = "bun"
 args = ["run", "dev"]
 dependencies = ["front-copy-resources", "front-install"]
 
@@ -31,7 +31,7 @@ parallel = true
 [tasks.front-dev-https]
 env = { "VITE_API_HOST" = "http://localhost:20180/v1/graphql" }
 cwd = "web"
-command = "yarn"
+command = "bun"
 args = ["run", "dev"]
 dependencies = ["front-copy-resources", "front-install"]
 
