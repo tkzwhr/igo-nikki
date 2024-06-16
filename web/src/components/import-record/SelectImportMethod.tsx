@@ -1,13 +1,13 @@
-import { Alert, Button, Input, Radio, Space } from 'antd';
-import { useState } from 'react';
-import styled from 'styled-components';
+import { Alert, Button, Input, Radio, Space } from "antd";
+import { useState } from "react";
+import styled from "styled-components";
 
 import {
   isValidCosumiUrl,
   parseCosumiUrl,
   readFile,
-} from '@/helpers/import.helper';
-import GameData from '@/models/GameData';
+} from "@/helpers/import.helper";
+import GameData from "@/models/GameData";
 
 type Props = {
   onSelect: (gameData: GameData) => void;
@@ -20,15 +20,15 @@ const StyledSpace = styled(Space)`
 `;
 
 export default function SelectImportMethod(props: Props) {
-  const [type, setType] = useState('file');
-  const [text, setText] = useState('');
+  const [type, setType] = useState("file");
+  const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const next = async (file?: File | undefined) => {
     let gameData: GameData | null = null;
 
     switch (type) {
-      case 'file': {
+      case "file": {
         if (!file) {
           return;
         }
@@ -37,33 +37,33 @@ export default function SelectImportMethod(props: Props) {
         gameData = GameData.parse(sgf);
 
         if (!gameData) {
-          setError('有効なSGFファイルではありません。');
+          setError("有効なSGFファイルではありません。");
           return;
         }
 
         break;
       }
-      case 'sgf': {
+      case "sgf": {
         gameData = GameData.parse(text);
 
         if (!gameData) {
-          setError('有効なSGFデータではありません。');
+          setError("有効なSGFデータではありません。");
           return;
         }
 
         break;
       }
-      case 'cosumi': {
+      case "cosumi": {
         if (!isValidCosumiUrl(text)) {
-          setError('COSUMIの結果ページを指定してください。');
+          setError("COSUMIの結果ページを指定してください。");
           return;
         }
 
         const { sgfText, playerIsBlack } = parseCosumiUrl(text);
-        gameData = GameData.parse(sgfText, playerIsBlack ? 'BLACK' : 'WHITE');
+        gameData = GameData.parse(sgfText, playerIsBlack ? "BLACK" : "WHITE");
 
         if (!gameData) {
-          setError('COSUMIのパラメータが不正です。');
+          setError("COSUMIのパラメータが不正です。");
           return;
         }
 
@@ -89,10 +89,10 @@ export default function SelectImportMethod(props: Props) {
         <Radio.Button value="sgf">SGFテキストから</Radio.Button>
         <Radio.Button value="cosumi">COSUMIの結果ページから</Radio.Button>
       </Radio.Group>
-      {type === 'file' && (
+      {type === "file" && (
         <Input type="file" onChange={(evt) => next(evt.target.files?.[0])} />
       )}
-      {type === 'sgf' && (
+      {type === "sgf" && (
         <>
           <Input.TextArea onChange={(evt) => setText(evt.target.value)} />
           <Button type="primary" onClick={() => next()}>
@@ -100,7 +100,7 @@ export default function SelectImportMethod(props: Props) {
           </Button>
         </>
       )}
-      {type === 'cosumi' && (
+      {type === "cosumi" && (
         <Space.Compact className="cosumi">
           <Input onChange={(evt) => setText(evt.target.value)} />
           <Button type="primary" onClick={() => next()}>

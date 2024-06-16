@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import type React from "react";
+import { useMemo } from "react";
+import { createBrowserRouter } from "react-router-dom";
 
-import { App, AppWithoutAuth0 } from '@/App';
-import { enableAuth0 } from '@/feature';
-import HomePage from '@/pages/Home.page';
-import SignInPage from '@/pages/SignIn.page';
+import { App, AppWithoutAuth0 } from "@/App";
+import { enableAuth0 } from "@/feature";
+import HomePage from "@/pages/Home.page";
+import SignInPage from "@/pages/SignIn.page";
 
-type PageKey = 'home' | 'sign-in';
+type PageKey = "home" | "sign-in";
 
 export const PAGES: {
   key: PageKey;
@@ -15,15 +16,15 @@ export const PAGES: {
   visibleOnMenu: boolean;
 }[] = [
   {
-    key: 'home',
-    path: '/',
-    label: 'ホーム',
+    key: "home",
+    path: "/",
+    label: "ホーム",
     visibleOnMenu: true,
   },
   {
-    key: 'sign-in',
-    path: '/sign-in',
-    label: 'サインイン',
+    key: "sign-in",
+    path: "/sign-in",
+    label: "サインイン",
     visibleOnMenu: false,
   },
 ];
@@ -38,12 +39,12 @@ export default function useRouter() {
           <AppWithoutAuth0>{node}</AppWithoutAuth0>
         );
 
-      let element = <></>;
+      let element = <div key={key} />;
       switch (key) {
-        case 'home':
+        case "home":
           element = createElement(<HomePage />);
           break;
-        case 'sign-in':
+        case "sign-in":
           element = createElement(<SignInPage />);
           break;
       }

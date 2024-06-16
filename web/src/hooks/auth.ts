@@ -1,5 +1,5 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { useAsync } from 'react-use';
+import { useAuth0 } from "@auth0/auth0-react";
+import { useAsync } from "react-use";
 
 type AuthBasis = {
   loading: false;
@@ -24,7 +24,7 @@ export default function useAuth(): AuthState {
   const tokenState = useAsync(async () => {
     return await getAccessTokenSilently({
       authorizationParams: {
-        audience: 'jp.tkzwhr.igo-nikki',
+        audience: "jp.tkzwhr.igo-nikki",
       },
     });
   }, [user]);
@@ -45,8 +45,8 @@ export default function useAuth(): AuthState {
     loading: false,
     isAuthenticated: true,
     token: tokenState.value,
-    userId: user?.sub ?? '',
-    userName: user?.name ?? '',
+    userId: user?.sub ?? "",
+    userName: user?.name ?? "",
     act: logout,
   };
 }

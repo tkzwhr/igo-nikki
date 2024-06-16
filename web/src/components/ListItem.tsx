@@ -1,10 +1,10 @@
-import CrownOutlined from '@ant-design/icons/CrownOutlined';
-import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
-import { Button, Popconfirm, Space } from 'antd';
-import React from 'react';
-import styled from 'styled-components';
+import CrownOutlined from "@ant-design/icons/CrownOutlined";
+import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
+import { Button, Popconfirm, Space } from "antd";
+import React from "react";
+import styled from "styled-components";
 
-import { ExtendedRecord } from '@/hooks/home.reducer';
+import type { ExtendedRecord } from "@/hooks/home.reducer";
 
 type Props = {
   data: ExtendedRecord;
@@ -43,7 +43,7 @@ export function ListItem(props: Props) {
     <StyledDiv>
       <Space>
         <CrownOutlined
-          style={{ visibility: props.data.won ? 'visible' : 'hidden' }}
+          style={{ visibility: props.data.won ? "visible" : "hidden" }}
         />
         <div className="game-name">{props.data.gameName}</div>
       </Space>

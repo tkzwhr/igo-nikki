@@ -1,4 +1,4 @@
-import { Result } from 'antd';
+import { Result } from "antd";
 
 export default function SignInPage() {
   return (

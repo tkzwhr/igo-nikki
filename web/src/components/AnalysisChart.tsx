@@ -1,7 +1,7 @@
-import { DualAxes } from '@ant-design/charts';
-import React, { useMemo } from 'react';
+import { DualAxes } from "@ant-design/charts";
+import React, { useMemo } from "react";
 
-import { AnalysisData } from '@/models/AnalysisData';
+import type { AnalysisData } from "@/models/AnalysisData";
 
 type Props = {
   data: AnalysisData[];
@@ -9,14 +9,14 @@ type Props = {
 };
 
 const turn0: AnalysisData & { turn: string } = {
-  move: '',
+  move: "",
   prior: 1,
   score_lead: 0,
   turn_number: 0,
   utility: 0,
   visits: 0,
   winrate: 0.5,
-  turn: '0',
+  turn: "0",
 };
 
 export default function AnalysisChart(props: Props) {
@@ -46,10 +46,12 @@ export default function AnalysisChart(props: Props) {
     ) * 1.2,
   );
 
+  // biome-ignore lint/suspicious/noExplicitAny: ignore
   const handlePlotEvent = (data: any) => {
-    data.chart.on('tooltip:show', (ev: any) => {
+    // biome-ignore lint/suspicious/noExplicitAny: ignore
+    data.chart.on("tooltip:show", (ev: any) => {
       try {
-        const turn = parseInt(ev.data.data.x);
+        const turn = Number.parseInt(ev.data.data.x);
         props.onTurnUpdate?.(turn);
       } catch (e) {
         console.warn(e);
@@ -68,13 +70,13 @@ export default function AnalysisChart(props: Props) {
     >
       {[
         {
-          type: 'line',
-          yField: 'winrate',
-          shapeField: 'smooth',
+          type: "line",
+          yField: "winrate",
+          shapeField: "smooth",
           axis: {
             y: {
-              position: 'right',
-              title: '勝率',
+              position: "right",
+              title: "勝率",
               labelFormatter: (v: number) => {
                 if (v > 0.5) {
                   return `黒 ${v * 100}%`;
@@ -82,31 +84,31 @@ export default function AnalysisChart(props: Props) {
                 if (v < 0.5) {
                   return `白 ${(1 - v) * 100}%`;
                 }
-                return '50%';
+                return "50%";
               },
             },
           },
           scale: {
             y: {
-              type: 'linear',
+              type: "linear",
               domain: [0, 1],
               tickMethod: () => [0, 0.25, 0.5, 0.75, 1.0],
             },
           },
         },
         {
-          type: 'line',
-          yField: 'score_lead',
-          shapeField: 'hvh',
+          type: "line",
+          yField: "score_lead",
+          shapeField: "hvh",
           axis: {
             y: {
-              position: 'left',
-              title: '目差',
+              position: "left",
+              title: "目差",
             },
           },
           scale: {
             y: {
-              type: 'linear',
+              type: "linear",
               domain: [-maxScoreLead, maxScoreLead],
               tickMethod: () => [
                 -maxScoreLead,

@@ -1,8 +1,8 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import { useMemo } from 'react';
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { useMemo } from "react";
 
-import { enableAuth0, getApiHost, getDevUser } from '@/feature';
+import { enableAuth0, getApiHost, getDevUser } from "@/feature";
 
 export default function useGQLClient(authToken: string | undefined) {
   return useMemo(() => {
@@ -11,13 +11,13 @@ export default function useGQLClient(authToken: string | undefined) {
     let authHeaders: Record<string, string>;
     if (enableAuth0()) {
       authHeaders = {
-        authorization: authToken ? `Bearer ${authToken}` : '',
+        authorization: authToken ? `Bearer ${authToken}` : "",
       };
     } else {
       authHeaders = {
-        'x-hasura-admin-secret': 'hasura',
-        'x-hasura-role': 'user',
-        'x-hasura-user-id': getDevUser()!,
+        "x-hasura-admin-secret": "hasura",
+        "x-hasura-role": "user",
+        "x-hasura-user-id": getDevUser() ?? "user_id",
       };
     }
 
