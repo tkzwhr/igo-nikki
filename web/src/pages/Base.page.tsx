@@ -1,7 +1,7 @@
 import HeaderContainer from "@/containers/Header.container.tsx";
 import { AuthContext } from "@tkzwhr/react-hasura-auth0";
 import { Layout, Skeleton } from "antd";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useLocation } from "react-use";

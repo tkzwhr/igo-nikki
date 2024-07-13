@@ -1,7 +1,6 @@
 import { PAGES } from "@/pages/pages.ts";
 import { AuthContext } from "@tkzwhr/react-hasura-auth0";
-import { Button, Menu, Space, Spin, Typography } from "antd";
-import type React from "react";
+import { Button, Menu, Space, Typography } from "antd";
 import { useCallback } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -45,6 +44,14 @@ export default function HeaderContainer() {
     });
   }, [authState]);
 
+  const signOut = useCallback(() => {
+    if (authState.mode !== "auth0") {
+      return;
+    }
+
+    authState.auth0.client.logout().then();
+  }, [authState]);
+
   let actions: React.ReactNode = <div />;
   if (authState.mode === "auth0") {
     if (authState.auth0.isAuthenticated) {
@@ -68,7 +75,7 @@ export default function HeaderContainer() {
           />
           <Space className="actions">
             {authState.auth0.user?.name ?? "Dev User"}
-            <Button ghost onClick={() => authState.auth0.client.logout()}>
+            <Button ghost onClick={signOut}>
               サインアウト
             </Button>
           </Space>

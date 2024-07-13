@@ -1,7 +1,6 @@
 import CrownOutlined from "@ant-design/icons/CrownOutlined";
 import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
 import { Button, Popconfirm, Space } from "antd";
-import React from "react";
 import styled from "styled-components";
 
 import type { ExtendedRecord } from "@/hooks/home.reducer";

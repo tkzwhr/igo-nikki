@@ -1,4 +1,8 @@
+import GameData from "@/models/GameData";
+import type { Record } from "@/models/Record";
+import GET_RECORDS from "@/queries/getRecords";
 import { useSuspenseQuery } from "@apollo/client";
+import { AuthContext } from "@tkzwhr/react-hasura-auth0";
 import { format } from "date-fns";
 import {
   type Dispatch,
@@ -9,11 +13,6 @@ import {
   useReducer,
   useRef,
 } from "react";
-
-import GetRecords from "@/graphql/get_records.graphql";
-import GameData from "@/models/GameData";
-import type { Record } from "@/models/Record";
-import { AuthContext } from "@tkzwhr/react-hasura-auth0";
 
 export type ExtendedRecord = Record & {
   gameName: string | null;
@@ -90,8 +89,7 @@ export function useHomeReducer(): [Store, Dispatch<Action>] {
   const authState = useContext(AuthContext);
   const userId =
     authState.mode === "auth0" ? authState.auth0.user?.sub : undefined;
-  // biome-ignore lint/suspicious/noExplicitAny: ignore
-  const { data } = useSuspenseQuery<any>(GetRecords, {
+  const { data } = useSuspenseQuery(GET_RECORDS, {
     variables: { id: userId ?? "" },
   });
   // biome-ignore lint/suspicious/noExplicitAny: ignore
@@ -107,7 +105,19 @@ export function useHomeReducer(): [Store, Dispatch<Action>] {
   const [store, dispatch] = useReducer(fn, initial);
 
   useEffect(() => {
-    dispatch({ type: "SET_RECORDS", data: data.records ?? [] });
+    const records: Record[] = data.records.map((r) => ({
+      id: r.id,
+      sgf_text: r.sgf_text,
+      player_color: r.player_color,
+      analysis_job: r.analysis_job
+        ? {
+            started_at: r.analysis_job.started_at ?? null,
+            finished_at: r.analysis_job.finished_at ?? null,
+            error_message: r.analysis_job.error_message ?? null,
+          }
+        : null,
+    }));
+    dispatch({ type: "SET_RECORDS", data: records });
   }, [data]);
 
   return [store, dispatch];

@@ -1,5 +1,5 @@
 import { DualAxes } from "@ant-design/charts";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import type { AnalysisData } from "@/models/AnalysisData";
 
