@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@ant-design/charts": "^2.1.1",
-    "@apollo/client": "^3.10.8",
-    "@auth0/auth0-react": "^2.2.4",
+    "@apollo/client": "^3.10.4",
+    "@tkzwhr/react-hasura-auth0": "git+https://github.com/tkzwhr/react-hasura-auth0#v0.1.0",
     "@sabaki/sgf": "github:tkzwhr/sgf",
     "antd": "^5.19.1",
     "date-fns": "^3.6.0",
@@ -44,6 +44,10 @@
     "vite-plugin-graphql-loader": "^3.0.1",
     "vitest": "^1.6.0"
   },
+  "trustedDependencies": [
+    "@tkzwhr/react-auth0-suspense",
+    "@tkzwhr/react-hasura-auth0"
+  ],
   "lint-staged": {
     "**.{ts,tsx}": ["bun run check:fix"]
   },

@@ -10,10 +10,10 @@ import {
   useRef,
 } from "react";
 
-import { AppContext } from "@/App";
 import GetRecords from "@/graphql/get_records.graphql";
 import GameData from "@/models/GameData";
 import type { Record } from "@/models/Record";
+import { AuthContext } from "@tkzwhr/react-hasura-auth0";
 
 export type ExtendedRecord = Record & {
   gameName: string | null;
@@ -87,10 +87,12 @@ const fn = (store: Store, action: Action): Store => {
 };
 
 export function useHomeReducer(): [Store, Dispatch<Action>] {
-  const appContext = useContext(AppContext);
+  const authState = useContext(AuthContext);
+  const userId =
+    authState.mode === "auth0" ? authState.auth0.user?.sub : undefined;
   // biome-ignore lint/suspicious/noExplicitAny: ignore
   const { data } = useSuspenseQuery<any>(GetRecords, {
-    variables: { id: appContext?.userId ?? "" },
+    variables: { id: userId ?? "" },
   });
   // biome-ignore lint/suspicious/noExplicitAny: ignore
   const goPlayerRef = useRef<any>(null);
