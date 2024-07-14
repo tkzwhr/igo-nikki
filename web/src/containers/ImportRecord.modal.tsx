@@ -1,12 +1,11 @@
-import { Modal, Steps } from "antd";
-import { useCallback, useContext, useState } from "react";
-import styled from "styled-components";
-
 import EditGameInfo from "@/components/import-record/EditGameInfo";
 import SelectImportMethod from "@/components/import-record/SelectImportMethod";
 import { HomeContext } from "@/hooks/home.reducer";
 import { useStorage } from "@/hooks/storage";
 import type GameData from "@/models/GameData";
+import { Modal, Steps } from "antd";
+import { useCallback, useContext, useState } from "react";
+import styled from "styled-components";
 
 const StyledDiv = styled.div`
   margin-top: 16px;

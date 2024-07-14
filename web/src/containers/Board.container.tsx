@@ -1,12 +1,11 @@
-import { useSuspenseQuery } from "@apollo/client";
-import { Card, Spin } from "antd";
-import React, { Suspense, useContext } from "react";
-import styled from "styled-components";
-
 import GoPlayer from "@/components/GoPlayer";
-import GetAnalysis from "@/graphql/get_analysis.graphql";
 import { mergeAnalysis } from "@/helpers/sgf.helper";
 import { HomeContext } from "@/hooks/home.reducer";
+import GET_ANALYSIS from "@/queries/getAnalysis";
+import { useSuspenseQuery } from "@apollo/client";
+import { Card, Spin } from "antd";
+import { Suspense, useContext } from "react";
+import styled from "styled-components";
 
 const StyledCard = styled(Card)`
   width: 720px;
@@ -19,8 +18,7 @@ function Inner() {
   // biome-ignore lint/style/noNonNullAssertion: ignore
   const record = store.records.find((r) => r.id === store.recordId)!;
 
-  // biome-ignore lint/suspicious/noExplicitAny: ignore
-  const { data: analysis } = useSuspenseQuery<any>(GetAnalysis, {
+  const { data: analysis } = useSuspenseQuery(GET_ANALYSIS, {
     variables: { recordId: record.id },
   });
 

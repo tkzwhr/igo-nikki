@@ -1,12 +1,11 @@
+import AnalysisChart from "@/components/AnalysisChart";
+import { HomeContext } from "@/hooks/home.reducer";
+import { useStorage } from "@/hooks/storage";
+import GET_ANALYSIS from "@/queries/getAnalysis";
 import { useSuspenseQuery } from "@apollo/client";
 import { Alert, Button, Card, Radio, Space, Spin } from "antd";
 import { format } from "date-fns";
-import React, { Suspense, useContext } from "react";
-
-import AnalysisChart from "@/components/AnalysisChart";
-import GetAnalysis from "@/graphql/get_analysis.graphql";
-import { HomeContext } from "@/hooks/home.reducer";
-import { useStorage } from "@/hooks/storage";
+import { Suspense, useContext } from "react";
 
 function Inner() {
   const [store, dispatch] = useContext(HomeContext);
@@ -15,8 +14,7 @@ function Inner() {
   // biome-ignore lint/style/noNonNullAssertion: ignore
   const record = store.records.find((r) => r.id === store.recordId)!;
 
-  // biome-ignore lint/suspicious/noExplicitAny: ignore
-  const { data: analysis } = useSuspenseQuery<any>(GetAnalysis, {
+  const { data: analysis } = useSuspenseQuery(GET_ANALYSIS, {
     variables: { recordId: record.id },
   });
 

@@ -1,13 +1,12 @@
-import { Alert, Button, Input, Radio, Space } from "antd";
-import { useState } from "react";
-import styled from "styled-components";
-
 import {
   isValidCosumiUrl,
   parseCosumiUrl,
   readFile,
 } from "@/helpers/import.helper";
 import GameData from "@/models/GameData";
+import { Alert, Button, Input, Radio, Space } from "antd";
+import { useState } from "react";
+import styled from "styled-components";
 
 type Props = {
   onSelect: (gameData: GameData) => void;

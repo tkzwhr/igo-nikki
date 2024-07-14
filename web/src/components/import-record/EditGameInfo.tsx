@@ -1,9 +1,8 @@
-import { useRef } from "react";
-import styled from "styled-components";
-
 import GoPlayer from "@/components/GoPlayer";
 import GameInfo from "@/components/import-record/GameInfo";
 import type GameData from "@/models/GameData";
+import { useRef } from "react";
+import styled from "styled-components";
 
 type Props = {
   gameData: GameData;

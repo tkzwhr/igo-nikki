@@ -1,25 +1,16 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-
-import "antd/dist/reset.css";
-
-import AuthProvider from "@/AuthProvider";
-import useRouter from "@/hooks/router";
-
-function Main() {
-  const router = useRouter();
-
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  );
-}
+import App from "./App.tsx";
 
 const rootContainer = document.getElementById("root");
 
 if (rootContainer) {
   const root = createRoot(rootContainer);
-  root.render(<Main />);
+  root.render(
+    <App
+      hasuraUri={import.meta.env.VITE_HASURA_URI}
+      auth0Domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      auth0ClientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+      auth0Audience={import.meta.env.VITE_AUTH0_AUDIENCE}
+    />,
+  );
 }

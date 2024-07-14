@@ -1,4 +1,8 @@
+import GameData from "@/models/GameData";
+import type { Record } from "@/models/Record";
+import GET_RECORDS from "@/queries/getRecords";
 import { useSuspenseQuery } from "@apollo/client";
+import { AuthContext } from "@tkzwhr/react-hasura-auth0";
 import { format } from "date-fns";
 import {
   type Dispatch,
@@ -9,11 +13,6 @@ import {
   useReducer,
   useRef,
 } from "react";
-
-import { AppContext } from "@/App";
-import GetRecords from "@/graphql/get_records.graphql";
-import GameData from "@/models/GameData";
-import type { Record } from "@/models/Record";
 
 export type ExtendedRecord = Record & {
   gameName: string | null;
@@ -87,10 +86,11 @@ const fn = (store: Store, action: Action): Store => {
 };
 
 export function useHomeReducer(): [Store, Dispatch<Action>] {
-  const appContext = useContext(AppContext);
-  // biome-ignore lint/suspicious/noExplicitAny: ignore
-  const { data } = useSuspenseQuery<any>(GetRecords, {
-    variables: { id: appContext?.userId ?? "" },
+  const authState = useContext(AuthContext);
+  const userId =
+    authState.mode === "auth0" ? authState.auth0.user?.sub : undefined;
+  const { data } = useSuspenseQuery(GET_RECORDS, {
+    variables: { id: userId ?? "" },
   });
   // biome-ignore lint/suspicious/noExplicitAny: ignore
   const goPlayerRef = useRef<any>(null);
@@ -105,7 +105,19 @@ export function useHomeReducer(): [Store, Dispatch<Action>] {
   const [store, dispatch] = useReducer(fn, initial);
 
   useEffect(() => {
-    dispatch({ type: "SET_RECORDS", data: data.records ?? [] });
+    const records: Record[] = data.records.map((r) => ({
+      id: r.id,
+      sgf_text: r.sgf_text,
+      player_color: r.player_color,
+      analysis_job: r.analysis_job
+        ? {
+            started_at: r.analysis_job.started_at ?? null,
+            finished_at: r.analysis_job.finished_at ?? null,
+            error_message: r.analysis_job.error_message ?? null,
+          }
+        : null,
+    }));
+    dispatch({ type: "SET_RECORDS", data: records });
   }, [data]);
 
   return [store, dispatch];

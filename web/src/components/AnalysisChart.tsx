@@ -1,7 +1,6 @@
-import { DualAxes } from "@ant-design/charts";
-import React, { useMemo } from "react";
-
 import type { AnalysisData } from "@/models/AnalysisData";
+import { DualAxes } from "@ant-design/charts";
+import { useMemo } from "react";
 
 type Props = {
   data: AnalysisData[];

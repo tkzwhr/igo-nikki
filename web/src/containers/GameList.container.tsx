@@ -1,10 +1,9 @@
-import { Card } from "antd";
-import { useCallback, useContext } from "react";
-import styled from "styled-components";
-
 import GameList from "@/components/GameList";
 import { HomeContext } from "@/hooks/home.reducer";
 import { useStorage } from "@/hooks/storage";
+import { Card } from "antd";
+import { useCallback, useContext } from "react";
+import styled from "styled-components";
 
 const StyledCard = styled(Card)`
   width: 360px;

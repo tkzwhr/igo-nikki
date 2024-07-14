@@ -1,22 +1,21 @@
+import type GameData from "@/models/GameData";
+import DELETE_RECORD from "@/queries/deleteRecord";
+import GET_RECORDS from "@/queries/getRecords";
+import INSERT_ANALYSIS_JOB from "@/queries/insertAnalysisJob";
+import INSERT_RECORD from "@/queries/insertRecord";
 import { useMutation } from "@apollo/client";
 import { useCallback } from "react";
 
-import DeleteRecord from "@/graphql/delete_record.graphql";
-import GetRecords from "@/graphql/get_records.graphql";
-import InsertAnalysisJob from "@/graphql/insert_analysis_job.graphql";
-import InsertRecord from "@/graphql/insert_record.graphql";
-import type GameData from "@/models/GameData";
-
 export function useStorage() {
-  const [insertRecordFn] = useMutation(InsertRecord, {
-    refetchQueries: [GetRecords],
+  const [insertRecordFn] = useMutation(INSERT_RECORD, {
+    refetchQueries: [GET_RECORDS],
   });
 
-  const [deleteRecordFn] = useMutation(DeleteRecord, {
-    refetchQueries: [GetRecords],
+  const [deleteRecordFn] = useMutation(DELETE_RECORD, {
+    refetchQueries: [GET_RECORDS],
   });
 
-  const [insertAnalysisJobFn] = useMutation(InsertAnalysisJob);
+  const [insertAnalysisJobFn] = useMutation(INSERT_ANALYSIS_JOB);
 
   const deleteRecord = useCallback(
     async (id: number) => {
@@ -41,7 +40,7 @@ export function useStorage() {
     async (id: number) => {
       await insertAnalysisJobFn({
         variables: { recordId: id },
-        refetchQueries: [GetRecords],
+        refetchQueries: [GET_RECORDS],
       });
     },
     [insertAnalysisJobFn],

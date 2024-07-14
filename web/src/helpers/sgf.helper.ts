@@ -1,6 +1,5 @@
-import { parse as parseSgf, stringify as stringifySgf } from "@sabaki/sgf";
-
 import type { AnalysisData } from "@/models/AnalysisData";
+import { parse as parseSgf, stringify as stringifySgf } from "@sabaki/sgf";
 
 type Analysis = {
   analysis: AnalysisData[];

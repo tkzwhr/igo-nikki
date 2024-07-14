@@ -1,10 +1,9 @@
+import { HomeContext } from "@/hooks/home.reducer";
 import DownloadOutlined from "@ant-design/icons/DownloadOutlined";
 import { Button, Card } from "antd";
 import { format } from "date-fns";
 import { useCallback, useContext } from "react";
 import styled from "styled-components";
-
-import { HomeContext } from "@/hooks/home.reducer";
 
 const StyledCard = styled(Card)`
   width: 360px;
