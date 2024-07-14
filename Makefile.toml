@@ -45,5 +45,5 @@ hasura --skip-update-check metadata export --admin-secret hasura
 [tasks.graphql_schema-update]
 cwd = "graphql"
 script = '''
-npx graphqurl http://localhost:20180/v1/graphql -H "X-Hasura-Admin-Secret: hasura" --introspect > schema.graphql
+bun x graphqurl http://localhost:20180/v1/graphql -H "X-Hasura-Admin-Secret: hasura" --introspect > schema.graphql
 '''
