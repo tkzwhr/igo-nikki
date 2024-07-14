@@ -31,8 +31,8 @@ jobs:
         uses: oven-sh/setup-bun@v1
       - name: Install dependencies (1/2)
         run: bun install
-      - if: always()
-        name: Install dependencies (2/2)
+        continue-on-error: true
+      - name: Install dependencies (2/2)
         run: bun install
       - name: Generate GraphQL Code
         run: bun run gen:gql
