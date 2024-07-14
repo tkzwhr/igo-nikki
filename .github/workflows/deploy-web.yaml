@@ -34,6 +34,8 @@ jobs:
       - if: always()
         name: Install dependencies (2/2)
         run: bun install
+      - name: Generate GraphQL Code
+        run: bun run gen:gql
       - name: Build
         env:
           VITE_HASURA_URI: ${{ secrets.VITE_HASURA_URI }}
