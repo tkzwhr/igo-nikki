@@ -1,65 +1,15 @@
 囲碁日記
 ===
 
-## 必要なソフトウェア
+# Requirement
 
 - cargo make
 - Docker
 - hasura cli
-- ngrok
 
-## 導入
+# Usage
 
-ローカルでAuth0をを使用するためには下記の要件を満たす必要がある。
-
-- サーバーをhttpsで起動する
-- `localhost` 以外のドメインを使用できるようにする
-
-### WSL2での設定例
-
-Windows側で下記のファイルを修正する。
-
-- `\Windows\System32\drivers\etc\hosts` に追記
-
-```text
-::1     localhost.local
-```
-
-WSL側で下記のファイルを修正する。
-
-- `/etc/wsl.conf` に追記
-
-```text
-[network]
-generateHosts = false
-```
-
-- `/etc/hosts` に追記
-
-```text
-::1     localhost.local
-```
-
-WSL側で、CA証明書をインストールし、Windowsの形式にエクスポートする。
-
-```shell
-mkcert -install
-cd $(mkcert -CAROOT)
-openssl pkcs12 -export -inkey rootCA-key.pem -in rootCA.pem -out rootCA.pfx
-explorer.exe .
-```
-
-エクスプローラーが起動したら、 `rootCA.pfx` をダブルクリックする。
-
-途中、証明書ストアのところで、 *証明書をすべて次のストアに配置する* ＞ *信頼されたルート証明機関に指定* と選択する。
-
-Firefoxの場合は、更にWindowsの証明書を使用する設定を追加する。
-
-`about:config` を開き、 `security.enterprise_roots.enabled` を `true` にする。
-
-ここまで行ったら **Windowsを再起動** する。
-
-### サーバーの起動
+### バックエンドシステム開始
 
 DB、Hasura、KataGoを起動する。
 
@@ -67,37 +17,22 @@ DB、Hasura、KataGoを起動する。
 cargo make up
 ```
 
-### サーバーの終了
-
-```shell
-cargo make down
-```
-
 ### フロントエンド開発
 
-事前にユーザーを作っておく必要がある。（1度だけ）
+`web/.env` を作成する。
 
-```shell
-cargo make create-user <ID>
+```text
+VITE_HASURA_URI=http://localhost:20180/v1/graphql
+VITE_AUTH0_DOMAIN=your auth0 domain
+VITE_AUTH0_CLIENT_ID=your auth0 client id
+VITE_AUTH0_AUDIENCE=your auth0 audience
 ```
 
-適当に整数を決めて、 `ID` に指定する。
-
-同じ整数を使って起動する。
+起動する。
 
 ```shell
-cargo make front-dev <ID>
+cargo make front-dev
 ```
-
-#### Auth0を使う
-
-```shell
-cargo make front-dev-auth0
-```
-
-ngrokのエンドポイントのURLが表示されたらAuth0側に設定する。
-
-Actions > Library > Custom を開き、 `sign-in` のactionのSecretsにある `entrypoint` を書き換える。
 
 ### 解析器開発
 
@@ -136,3 +71,17 @@ cargo make hasura_metadata-update
 ```shell
 cargo make graphql_schema-update
 ```
+
+### バックエンドシステム終了
+
+```shell
+cargo make down
+```
+
+# Note
+
+- なし
+
+# License
+
+- [MIT](https://en.wikipedia.org/wiki/MIT_License)

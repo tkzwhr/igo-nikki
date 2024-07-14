@@ -1,7 +1,7 @@
 import HeaderContainer from "@/containers/Header.container.tsx";
 import { AuthContext } from "@tkzwhr/react-hasura-auth0";
 import { Layout, Skeleton } from "antd";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useLocation } from "react-use";
@@ -24,6 +24,7 @@ const StyledLayout = styled(Layout)`
 export default function BasePage() {
   const authState = useContext(AuthContext);
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
 
   if (
     authState.mode === "auth0" &&
@@ -39,6 +40,30 @@ export default function BasePage() {
     location.pathname === "/sign-in"
   ) {
     return <Navigate replace to="/" />;
+  }
+
+  useEffect(() => {
+    if (authState.mode !== "auth0") {
+      return;
+    }
+
+    const userId = authState.auth0.user?.sub;
+    if (!userId) {
+      return;
+    }
+
+    (async () => {
+      if (import.meta.env.DEV) {
+        const { registerUser } = await import("@/utils/dev");
+        await registerUser(userId, authState.auth0.user?.name ?? "Dev User");
+      }
+
+      setLoading(false);
+    })();
+  }, [authState]);
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (
