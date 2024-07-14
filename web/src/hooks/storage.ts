@@ -1,11 +1,10 @@
-import { useMutation } from "@apollo/client";
-import { useCallback } from "react";
-
 import type GameData from "@/models/GameData";
 import DELETE_RECORD from "@/queries/deleteRecord";
 import GET_RECORDS from "@/queries/getRecords";
 import INSERT_ANALYSIS_JOB from "@/queries/insertAnalysisJob";
 import INSERT_RECORD from "@/queries/insertRecord";
+import { useMutation } from "@apollo/client";
+import { useCallback } from "react";
 
 export function useStorage() {
   const [insertRecordFn] = useMutation(INSERT_RECORD, {

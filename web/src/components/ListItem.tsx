@@ -1,9 +1,8 @@
+import type { ExtendedRecord } from "@/hooks/home.reducer";
 import CrownOutlined from "@ant-design/icons/CrownOutlined";
 import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
 import { Button, Popconfirm, Space } from "antd";
 import styled from "styled-components";
-
-import type { ExtendedRecord } from "@/hooks/home.reducer";
 
 type Props = {
   data: ExtendedRecord;
