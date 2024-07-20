@@ -10,7 +10,7 @@ args = ["compose", "-f", "infra/docker-compose.yml", "down"]
 [tasks.front-install]
 cwd = "web"
 command = "bun"
-args = ["install"]
+args = ["install", "--concurrent-scripts", "1"]
 
 [tasks.front-dev]
 cwd = "web"
