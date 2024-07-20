@@ -26,6 +26,28 @@ export default function BasePage() {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    if (authState.mode !== "auth0") {
+      setLoading(false);
+      return;
+    }
+
+    const userId = authState.auth0.user?.sub;
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
+    (async () => {
+      if (import.meta.env.DEV) {
+        const { registerUser } = await import("@/utils/dev");
+        await registerUser(userId, authState.auth0.user?.name ?? "Dev User");
+      }
+
+      setLoading(false);
+    })();
+  }, [authState]);
+
   if (
     authState.mode === "auth0" &&
     !authState.auth0.isAuthenticated &&
@@ -41,26 +63,6 @@ export default function BasePage() {
   ) {
     return <Navigate replace to="/" />;
   }
-
-  useEffect(() => {
-    if (authState.mode !== "auth0") {
-      return;
-    }
-
-    const userId = authState.auth0.user?.sub;
-    if (!userId) {
-      return;
-    }
-
-    (async () => {
-      if (import.meta.env.DEV) {
-        const { registerUser } = await import("@/utils/dev");
-        await registerUser(userId, authState.auth0.user?.name ?? "Dev User");
-      }
-
-      setLoading(false);
-    })();
-  }, [authState]);
 
   if (loading) {
     return <div>Loading...</div>;
